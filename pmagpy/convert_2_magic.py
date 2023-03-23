@@ -3733,7 +3733,7 @@ def iodp_dscr_lore(dscr_file,dscr_ex_file="", dir_path=".", input_dir_path="",vo
 ### IODP_jr6_magic
 
 def iodp_jr6_lore(jr6_file, dir_path=".", input_dir_path="",volume=7,noave=False,dc_field=50e-6,
-                  meas_file="measurements.txt", spec_file="specimens.txt"):
+                  meas_file="measurements.txt", spec_file="specimens.txt", specnum=0):
     """
     Convert IODP JR6 measurement files in MagIC file(s). This program
     assumes that you have created the specimens, samples, sites and location
@@ -3789,10 +3789,12 @@ def iodp_jr6_lore(jr6_file, dir_path=".", input_dir_path="",volume=7,noave=False
     meas_out = os.path.join(output_dir_path, meas_file)
     citations = "This study"
     in_df=pd.read_csv(jr6_file)
+#     import pdb; pdb.set_trace()
     if len(in_df)==0:
         print ('you must download a csv file from the LIMS database and place it in your input_dir_path')
         return False, ""
-    in_df.sort_values(by='Treatment value (mT or °C or ex. B14)',inplace=True)
+    try: in_df.sort_values(by='Treatment value (mT or °C or ex. B14)',inplace=True)
+    except KeyError as e: in_df.sort_values(by='Treatment value',inplace=True)
     hole,jr6_specimens=iodp_sample_names(in_df)
     for spec in list(jr6_specimens.unique()):
         if spec not in LORE_specimens:
@@ -3828,7 +3830,8 @@ def iodp_jr6_lore(jr6_file, dir_path=".", input_dir_path="",volume=7,noave=False
 
     measurements_df['dir_dec']=drot # declination
     measurements_df['dir_inc']=irot # inclination
-    measurements_df['magn_volume']=in_df['Intensity raw (A/m)'] # magnetization
+    try: measurements_df['magn_volume']=in_df['Intensity raw (A/m)'] # magnetization
+    except KeyError as e: measurements_df['magn_volume']=in_df['Total intensity (A/m)'] # magnetization
     measurements_df['magn_moment']=measurements_df['magn_volume']*volume # moment in Am^2
     measurements_df['description']=in_df['Treatment type']
     measurements_df['treat_ac_field']=in_df['Treatment value (mT or °C or ex. B14)']*1e-3 # initialize all treatments to AF in mT
@@ -4565,6 +4568,8 @@ def iodp_samples_csv(lims_sample_file, spec_file='specimens.txt',samp_file="samp
     volume_key = 'Volume (cm3)'
     if volume_key not in iodp_sample_data.columns:
         volume_key = 'Sample volume (CC)'
+    if volume_key not in iodp_sample_data.columns:
+        volume_key = 'Sample volume (cm3)'
     # convert the meta data in the sample master to MagIC datamodel 3
     # construct the sample name
     holes,specimens=iodp_sample_names(iodp_sample_data)
@@ -4621,6 +4626,7 @@ def iodp_samples_csv(lims_sample_file, spec_file='specimens.txt',samp_file="samp
     specimens_df['specimen_name_alternatives']=iodp_sample_data[text_key]
     specimens_df['result_quality']='g'
     specimens_df['method_codes']='FS-C-DRILL-IODP:SP-SS-C:SO-V'
+    iodp_sample_data[volume_key] = iodp_sample_data[volume_key].replace(r'^\s*$', 7, regex=True) #Hard coded default, seems as if volume not passed in. Need to check later.
     specimens_df['volume']=iodp_sample_data[volume_key]*1e-6 # convert from cm^3 to m^3
     specimens_df['citations']='This study'
     # fill in the np.nan with blanks
@@ -5019,15 +5025,15 @@ def iodp_srm(csv_file="", dir_path=".", input_dir_path="",
                 inc_key = "Inclination background & tray corrected (deg)"
             elif "Inclination background & drift corrected (deg)" in keys:
                 inc_key = "Inclination background & drift corrected (deg)"
-            elif "Inclination background + tray corrected  (\N{DEGREE SIGN})" in keys:
-                inc_key = "Inclination background + tray corrected  (\N{DEGREE SIGN})"
+            elif "Inclination background + tray corrected  (\n{DEGREE SIGN})" in keys:
+                inc_key = "Inclination background + tray corrected  (\n{DEGREE SIGN})"
             else:
                 print("couldn't find inclination")
             # get declination key
             if "Declination (Tray- and Bkgrd-Corrected) (deg)" in keys:
                 dec_key = "Declination (Tray- and Bkgrd-Corrected) (deg)"
-            elif "Declination background + tray corrected (\N{DEGREE SIGN})" in keys:
-                dec_key = "Declination background + tray corrected (\N{DEGREE SIGN})"
+            elif "Declination background + tray corrected (\n{DEGREE SIGN})" in keys:
+                dec_key = "Declination background + tray corrected (\n{DEGREE SIGN})"
             elif "Declination background + tray corrected (deg)" in keys:
                 dec_key = "Declination background + tray corrected (deg)"
             elif "Declination background + tray corrected (\xc2\xb0)" in keys:
@@ -5243,7 +5249,7 @@ def iodp_srm(csv_file="", dir_path=".", input_dir_path="",
                         except KeyError:
                             try:
                                 treatment_value = float(
-                                    InRec["Treatment value<br> (mT or \N{DEGREE SIGN}C)"]) + 273
+                                    InRec["Treatment value<br> (mT or \n{DEGREE SIGN}C)"]) + 273
                             except KeyError:
                                 print([k for k in InRec.keys() if 'treat' in k.lower()])
                                 print("-W- Couldn't find column for Treatment Value")
@@ -6132,13 +6138,17 @@ def jr6_jr6(mag_file, dir_path=".", input_dir_path="",
             SampRec["citations"] = "This study"
             SampRec["analysts"] = user
             if row['param3']==3:
-                row['azimuth']=(row['azimuth']+90)%360
-            if row['param3']==9:
                 row['azimuth']=(row['azimuth']-90)%360
+            if row['param3']==6:
+                row['azimuth']=(row['azimuth']+180)%360
+            if row['param3']==9:
+                row['azimuth']=(row['azimuth']+90)%360
             if row['param3']==12:
-                row['azimuth']=(row['azimuth']-180)%360
+                row['azimuth']=row['azimuth']
             if row['param2']==90:
-                row['dip']=90-row['dip']
+                row['dip']=row['dip']-90
+            if row['param2']==0:
+                row['dip']=-row['dip']
             SampRec['azimuth'] = row['azimuth']
             SampRec['dip'] = row['dip']
             SampRec['bed_dip_direction'] = row['bed_dip_direction']
@@ -6172,6 +6182,7 @@ def jr6_jr6(mag_file, dir_path=".", input_dir_path="",
         MeasRec["standard"] = 'u'
         MeasRec["treat_step_num"] = 0
         MeasRec["treat_ac_field"] = '0'
+        print(row['step'],str(row['step'])[0:1] == 'TD')
         if row['step'] == 'NRM' or row['step']=='0':
             meas_type = "LT-NO"
         elif 'step_unit' in row and row['step_unit'] == 'C' or meth_code=='LP-DIR-T':
@@ -6188,7 +6199,7 @@ def jr6_jr6(mag_file, dir_path=".", input_dir_path="",
             treat = float(row['step'][1:])
             MeasRec["treat_ac_field"] = '%8.3e' % (
                 treat*1e-3)  # convert from mT to tesla
-        elif str(row['step'])[0] == 'TD':
+        elif str(row['step'])[:2] == 'TD':
             meas_type = "LT-T-Z"
             treat = float(row['step'][2:])
             MeasRec["treat_temp"] = '%8.3e' % (treat+273.)  # temp in kelvin
@@ -6207,11 +6218,13 @@ def jr6_jr6(mag_file, dir_path=".", input_dir_path="",
         MeasRec["magn_moment"] = str(row['magn_moment'])
         MeasRec["magn_volume"] = str(row['magn_volume'])
         if row['param1']==3: 
-            row['dir_dec']=(row['dir_dec']-90)%360
-        if row['param1']==6: 
-            row['dir_dec']=(row['dir_dec']-180)%360
-        if row['param1']==9: 
             row['dir_dec']=(row['dir_dec']+90)%360
+        if row['param1']==6: 
+            row['dir_dec']=(row['dir_dec']+180)%360
+        if row['param1']==9: 
+            row['dir_dec']=(row['dir_dec']+270)%360
+        if row['param1']==12: 
+            row['dir_dec']=row['dir_dec']
         MeasRec["dir_dec"] = str(row['dir_dec'])
         MeasRec["dir_inc"] = str(row['dir_inc'])
         MeasRec['method_codes'] = meas_type
@@ -10036,11 +10049,11 @@ def sio(mag_file, dir_path=".", input_dir_path="",
     con.add_magic_table_from_data(dtype='samples', data=SampRecs)
     con.add_magic_table_from_data(dtype='sites', data=SiteRecs)
     con.add_magic_table_from_data(dtype='locations', data=LocRecs)
-    for rec in MeasRecs: 
-        print (float(rec['treat_temp'])-273,rec['method_codes'])
+    #for rec in MeasRecs: 
+    #    print (float(rec['treat_temp'])-273,rec['method_codes'])
     MeasOuts = pmag.measurements_methods3(MeasRecs, noave=False)
-    for rec in MeasOuts:
-        print (float(rec['treat_temp'])-273,rec['method_codes'])
+    #for rec in MeasOuts:
+    #    print (float(rec['treat_temp'])-273,rec['method_codes'])
 
 #    MeasOuts = pmag.measurements_methods3(MeasRecs, noave)
     con.add_magic_table_from_data(dtype='measurements', data=MeasOuts)

@@ -1,4 +1,3 @@
-
 import codecs
 import math
 import os
@@ -26,8 +25,13 @@ def get_version():
     Determines the version of PmagPy installed on your machine.
 
     Returns
-    ________
-        version : string of pmagpy version, such as "pmagpy-3.8.8"
+    -------
+    version : string of pmagpy version, such as "pmagpy-3.8.8"
+        
+    Examples
+    --------
+    >>> pmag.get_version()
+    'pmagpy-4.2.106'
     """
     version = find_pmag_dir.get_version()
     return version
@@ -35,26 +39,24 @@ def get_version():
 
 def sort_diclist(undecorated, sort_on):
     """
-    Sort a list of dictionaries by the value in each
-    dictionary for the sorting key
+    Sort a list of dictionaries by the value in each dictionary for the sorting key.
 
     Parameters
-    __________
-        undecorated : list of dicts
-        sort_on : str, numeric
-            key that is present in all dicts to sort on
+    ----------
+    undecorated : list of dicts
+    sort_on : str, numeric
+        key that is present in all dicts to sort on
 
     Returns
-    _______
-        ordered list of dicts
+    -------
+    Ordered list of dicts
 
     Examples
-    ________
+    --------
     >>> lst = [{'key1': 10, 'key2': 2}, {'key1': 1, 'key2': 20}]
     >>> sort_diclist(lst, 'key1')
     [{'key2': 20, 'key1': 1}, {'key2': 2, 'key1': 10}]
     >>> sort_diclist(lst, 'key2')
-    [{'key2': 2, 'key1': 10}, {'key2': 20, 'key1': 1}]
     """
     decorated = [(len(dict_[sort_on]) if hasattr(dict_[sort_on], '__len__') else dict_[
                   sort_on], index) for (index, dict_) in enumerate(undecorated)]
@@ -64,25 +66,28 @@ def sort_diclist(undecorated, sort_on):
 
 def get_dictitem(In, k, v, flag, float_to_int=False):
     """ 
-    Returns a list of dictionaries from list In with key,k  = value, v . CASE INSENSITIVE # allowed keywords:
+    Returns a list of dictionaries from list In with key (k)  = value (v) . 
+    
+    CASE INSENSITIVE # allowed keywords:
         requires that the value of k in the dictionaries contained in In be castable to string and requires that v be castable to a string if flag is T,F, 
         has or not and requires they be castable to float if flag is eval, min, or max.
         float_to_int goes through the relvant values in In and truncates them,
         (like "0.0" to "0") for evaluation, default is False
 
     Parameters
-    __________
-        In : list of dictionaries to work on
-        k : key to test
-        v : key value to test
-        flag : [T,F,has, or not]
-        float_to int : if True, truncates to integer
+    ----------
+    In : list of dictionaries
+    k : key to test
+    v : key value to test
+    flag : [T,F,has, or not]
+    float_to int : if True, truncates to integer
+    
     Returns
-    _______
-        list of dictionaries that meet conditions
+    -------
+    List of dictionaries that meet conditions
         
     Examples
-    _________
+    --------
     >>> In=[{'specimen':'abc01b01','dec':'10.3','inc':'43','int':'5.2e-6'},  
          {'specimen':'abc01b02','dec':'12.3','inc':'42','int':'4.9e-6'}]
     >>> k = 'specimen'
@@ -90,7 +95,6 @@ def get_dictitem(In, k, v, flag, float_to_int=False):
     >>> flag='T'
     >>> get_dictitem(In,k,v,flag)
     [{'specimen': 'abc01b02', 'dec': '12.3', 'inc': '42', 'int': '4.9e-6'}]
-   
     """
     if float_to_int:
         try:
@@ -145,23 +149,23 @@ def get_dictitem(In, k, v, flag, float_to_int=False):
 
 def get_dictkey(In, k, dtype):
     """
-    Returns list of given key (k) from input list of dictionaries (In) in data typed
-    dtype.
+    Returns list of given key (k) from input list of dictionaries (In) in data typed dtype.
     
     Parameters
-    __________
-        In : list of dictionaries to work on
-        k : key to return
-        dtype : str
-            "" : returns string value
-            "f" : returns float
-            "int" : returns integer
+    ----------
+    In : list of dictionaries to work on
+    k : key to return
+    dtype : str
+        "" : returns string value
+        "f" : returns float
+        "int" : returns integer
+    
     Returns
-    ______
-        list of values of the key specified to return
+    -------
+    Out : List of values of the key specified to return
         
     Examples
-    _________
+    --------
     >>> In=[{'specimen':'abc01b01','dec':'10.3','inc':'43','int':'5.2e-6'},  
          {'specimen':'abc01b02','dec':'12.3','inc':'42','int':'4.9e-6'}]
     >>> k = 'specimen'
@@ -169,7 +173,6 @@ def get_dictkey(In, k, dtype):
     >>> get_dictkey(In,k,dtype)
     ['abc01b01', 'abc01b02']
     """
-
     Out = []
     for d in In:
         if dtype == '':
@@ -195,16 +198,17 @@ def find(f, seq):
     """
     Returns input value (f) if it is in the given array (seq). 
     
-    Parameters: 
-    ___________
-        f : value
-        seq : array of values
-    Returns:
-    ________
-        value 'f' if it is in seq 
+    Parameters 
+    ----------
+    f : string value
+    seq : array of strings
+
+    Returns
+    -------
+    String value 'f' if it is found in seq.
         
     Examples
-    ________
+    --------
     >>> A = ['11', '12', '13', '14']
     >>> find('11',A)
     '11'
@@ -219,13 +223,14 @@ def get_orient(samp_data, er_sample_name, **kwargs):
     """
     Returns orientation and orientation method of input sample (er_sample_name). 
     
-    Parameters: 
-    ___________
-        samp_data : PmagPy list of dicts or pandas DataFrame
-        er_sample_name : sample name
-    Returns:
-    ________
-        orientation data and corresponding orientation method of specified sample (er_sample_name)
+    Parameters 
+    ----------
+    samp_data : PmagPy list of dicts or pandas DataFrame
+    er_sample_name : string for the sample name
+        
+    Returns
+    -------
+    Orientation data and corresponding orientation method of specified sample (er_sample_name).
     """
     if isinstance(samp_data, pd.DataFrame):
         samp_data = (samp_data.T.apply(dict))
@@ -284,11 +289,12 @@ def EI(inc):
 
     Parameters
     ----------
-        inc : inclination in degrees (int or float)
+    inc : Integer or float
+        Inclination in degrees.
 
     Returns
-    ---------
-        elongation : float
+    -------
+    elongation : float
 
     Examples
     ---------
@@ -310,20 +316,19 @@ def find_f(data):
 
     Parameters
     ----------
-        data : array of declination, inclination pairs
-            (e.g. np.array([[140,21],[127,23],[142,19],[136,22]]))
+    data : array of declination, inclination pairs
 
     Returns
-    ---------
-        Es : list of elongation values
-        Is : list of inclination values
-        Fs : list of flattening factors
-        V2s : list of elongation directions (relative to the distribution)
+    -------
+    Es : list of elongation values
+    Is : list of inclination values
+    Fs : list of flattening factors
+    V2s : list of elongation directions (relative to the distribution)
 
     The function will return a zero list ([0]) for each of these parameters if the directions constitute a pathological distribution.
 
     Examples
-    ---------
+    --------
     >>> directions = np.array([[140,21],[127,23],[142,19],[136,22]])
     >>> Es, Is, Fs, V2s = pmag.find_f(directions)
     """
@@ -393,7 +398,16 @@ def cooling_rate(SpecRec, SampRecs, crfrac, crtype):
 
 def convert_lat(Recs):
     """
-    uses lat, for age<5Ma, model_lat if present, else tries to use average_inc to estimate plat.
+    Uses lat, for age<5Ma, model_lat if present, else tries to use average_inc to estimate plat.
+    
+    Parameters
+    ----------
+    Recs : list of dictionaries in data model by data_model
+        This list of dictionaries must only include data with ages less than 5 Ma
+    
+    Returns
+    -------
+    New : list of dictionaries with plat estimate
     """
     New = []
     for rec in Recs:
@@ -411,12 +425,40 @@ def convert_lat(Recs):
 
 def convert_ages(Recs, data_model=3):
     """
-    Converts ages in a list of dictionsaries to units of Millions of years ago, Ma. 
+    Converts ages in a list of dictionaries to units of Millions of years ago, Ma. 
     
     Parameters
-    _________
-        Recs : list of dictionaries in data model by data_model
-        data_model : MagIC data model (default is 3)
+    ----------
+    Recs : list of dictionaries in data model by data_model
+    data_model : MagIC data model (default is 3)
+    
+    Returns
+    -------
+    New : list of dictionaries with the converted ages
+    
+    Examples 
+    --------
+    >>> sites = pd.read_csv('data_files/convert_ages/sites.txt',sep='\t',header=1) # create a dataframe from example file
+    >>> sites_age = sites.dropna(subset=['age'])     # drop all rows that have nan in the age column since our function does not work with nans
+    >>> sites_dict = sites_age.to_dict('records')    # 'records' to return list like values within dict
+    >>> sites_ages_converted = pmag.convert_ages(sites_dict)
+    >>> sites_ages_converted_df = pd.DataFrame.from_dict(sites_ages_converted)   # convert new age converted list of dictionaries back to a dataframe
+    >>> print('ORIGINAL FILE: \n',sites_age['age'].head())
+    >>> print('CONVERTED AGES FILE: \n',sites_ages_converted_df['age'].head());   
+    ORIGINAL FILE: 
+    1    100.0
+    3    625.0
+    5    625.0
+    7    750.0
+    9    800.0
+    Name: age, dtype: float64
+    CONVERTED AGES FILE: 
+     0    1.9110e-03
+    1    1.3860e-03
+    2    1.3860e-03
+    3    1.2610e-03
+    4    1.2110e-03
+    Name: age, dtype: object
     """
     if data_model == 3:
         site_key = 'site'
@@ -473,13 +515,15 @@ def convert_meas_2_to_3(meas_data_2):
 def convert_items(data, mapping):
     """
     This function maps a given set of dictionsaries to the new given map and outputs an updated dictionary.
+    
     Parameters
-    __________
-        data : list of dicts (each dict a record for one item)
-        mapping : mapping with column names to swap into the records
+    ----------
+    data : list of dicts (each dict a record for one item)
+    mapping : mapping with column names to swap into the records
+        
     Returns
-    _______
-        updated list of dicts
+    -------
+    new_recs : updated list of dicts
     """
     new_recs = []
     for rec in data:
@@ -497,18 +541,18 @@ def convert_directory_2_to_3(meas_fname="magic_measurements.txt", input_dir=".",
 
     Parameters
     ----------
-        meas_name : name of measurement file (do not include full path,
+    meas_name : name of measurement file (do not include full path,
         default is "magic_measurements.txt")
-        input_dir : name of input directory (default is ".")
-        output_dir : name of output directory (default is ".")
-        meas_only : boolean, convert only measurement data (default is False)
-        data_model : data_model3.DataModel object (default is None)
+    input_dir : name of input directory (default is ".")
+    output_dir : name of output directory (default is ".")
+    meas_only : boolean, convert only measurement data (default is False)
+    data_model : data_model3.DataModel object (default is None)
 
     Returns
-    ---------
-        NewMeas : 3.0 measurements data (output of pmag.convert_items)
-        upgraded : list of files successfully upgraded to 3.0
-        no_upgrade: list of 2.5 files not upgraded to 3.0
+    -------
+    NewMeas : 3.0 measurements data (output of pmag.convert_items)
+    upgraded : list of files successfully upgraded to 3.0
+    no_upgrade: list of 2.5 files not upgraded to 3.0
     """
     convert = {'specimens': map_magic.spec_magic2_2_magic3_map,
                'samples': map_magic.samp_magic2_2_magic3_map,
@@ -573,15 +617,15 @@ def convert_and_combine_2_to_3(dtype, map_dict, input_dir=".", output_dir=".", d
 
     Parameters
     ----------
-        dtype : string for input type (specimens, samples, sites, etc.)
-        map_dict : dictionary with format {header2_format: header3_format, ...} (from mapping.map_magic module)
-        input_dir : input directory, default "."
-        output_dir : output directory, default "."
-        data_model : data_model3.DataModel object, default None
+    dtype : string for input type (specimens, samples, sites, etc.)
+    map_dict : dictionary with format {header2_format: header3_format, ...} (from mapping.map_magic module)
+    input_dir : input directory, default "."
+    output_dir : output directory, default "."
+    data_model : data_model3.DataModel object, default None
 
     Returns
-    ---------
-        output_file_name with 3.0 format data (or None if translation failed)
+    -------
+    output_file_name with 3.0 format data (or None if translation failed)
     """
     # read in er_ data & make DataFrame
     er_file = os.path.join(input_dir, 'er_{}.txt'.format(dtype))
@@ -633,16 +677,16 @@ def convert_criteria_file_2_to_3(fname="pmag_criteria.txt", input_dir=".",
     Convert a criteria file from 2.5 to 3.0 format and write it out to file
 
     Parameters
-    __________
-        fname : string of filename (default "pmag_criteria.txt")
-        input_dir : string of input directory (default ".")
-        output_dir : string of output directory (default ".")
-        data_model : data_model.DataModel object (default None)
+    ----------
+    fname : string of filename (default "pmag_criteria.txt")
+    input_dir : string of input directory (default ".")
+    output_dir : string of output directory (default ".")
+    data_model : data_model.DataModel object (default None)
 
     Returns
-    _______
-        outfile : string output criteria filename, or False
-        crit_container : cb.MagicDataFrame with 3.0 criteria table
+    -------
+    outfile : string output criteria filename, or False
+    crit_container : cb.MagicDataFrame with 3.0 criteria table
     """
     # get criteria from infile
     fname = os.path.join(input_dir, fname)
@@ -706,7 +750,7 @@ def getsampVGP(SampRec, SiteNFO, data_model=2.5):
         else:
             lat = float(site[0]['lat'])
             lon = float(site[0]['lon'])
-        dec = float1(SampRec['dir_dec'])
+        dec = float(SampRec['dir_dec'])
         inc = float(SampRec['dir_inc'])
         if SampRec['dir_alpha95'] != "":
             a95 = float(SampRec['dir_alpha95'])
@@ -759,7 +803,7 @@ def getsampVGP(SampRec, SiteNFO, data_model=2.5):
         ResRec['average_inc'] = SampRec['sample_inc']
         ResRec['average_alpha95'] = SampRec['sample_alpha95']
         ResRec['tilt_correction'] = SampRec['sample_tilt_correction']
-        ResRec['pole_comp_name'] = SampleRec['sample_comp_name']
+        ResRec['pole_comp_name'] = SampRec['sample_comp_name']
         ResRec['vgp_lat'] = '%7.1f' % (plat)
         ResRec['vgp_lon'] = '%7.1f' % (plon)
         ResRec['vgp_dp'] = '%7.1f' % (dp)
@@ -807,6 +851,7 @@ def getsampVDM(SampRec, SampNFO):
 
 
 def getfield(irmunits, coil, treat):
+    
     # calibration of ASC Impulse magnetizer
     if coil == "3":
         m, b = 0.0071, -0.004  # B=mh+b where B is in T, treat is in Volts
@@ -986,37 +1031,38 @@ def orient(mag_azimuth, field_dip, or_con):
     Uses specified orientation convention to convert user supplied orientations
     to laboratory azimuth and plunge. 
     
-    Parameters:
-    ________________
-        mag_azimuth: float
-            orientation of the field orientation arrow with respect to north
-        field_dip : float
-            dip (or hade) or field arrow.
-                if hade, with respect to vertical down
-                if inclination, with respect to horizontal (positive down)
-        or_con : int
-            orientation convention : int
-            Samples are oriented in the field with a "field arrow" and measured in the laboratory with a "lab arrow". The lab arrow is the positive X direction of the right handed coordinate system of the specimen measurements. The lab and field arrows may  not be the same. In the MagIC database, we require the orientation (azimuth and plunge) of the X direction of the measurements (lab arrow). Here are some popular conventions that convert the field arrow azimuth (mag_azimuth in the orient.txt file) and dip (field_dip in orient.txt) to the azimuth and plunge  of the laboratory arrow (sample_azimuth and sample_dip in er_samples.txt). The two angles, mag_azimuth and field_dip are explained below.
+    Parameters
+    -----------
+    mag_azimuth: float
+        orientation of the field orientation arrow with respect to north
+    field_dip : float
+        dip (or hade) or field arrow.
+            if hade, with respect to vertical down
+            if inclination, with respect to horizontal (positive down)
+    or_con : int
+        orientation convention : int
+    
+    Samples are oriented in the field with a "field arrow" and measured in the laboratory with a "lab arrow". The lab arrow is the positive X direction of the right handed coordinate system of the specimen measurements. The lab and field arrows may  not be the same. In the MagIC database, we require the orientation (azimuth and plunge) of the X direction of the measurements (lab arrow). Here are some popular conventions that convert the field arrow azimuth (mag_azimuth in the orient.txt file) and dip (field_dip in orient.txt) to the azimuth and plunge  of the laboratory arrow (sample_azimuth and sample_dip in er_samples.txt). The two angles, mag_azimuth and field_dip are explained below.
 
-            [1] Standard Pomeroy convention of azimuth and hade (degrees from vertical down)
-                 of the drill direction (field arrow).  lab arrow azimuth= sample_azimuth = mag_azimuth;
-                 lab arrow dip = sample_dip =-field_dip. i.e. the lab arrow dip is minus the hade.
-            [2] Field arrow is the strike  of the plane orthogonal to the drill direction,
-                 Field dip is the hade of the drill direction.  Lab arrow azimuth = mag_azimuth-90
-                 Lab arrow dip = -field_dip
-            [3] Lab arrow is the same as the drill direction;
-                 hade was measured in the field.
-                 Lab arrow azimuth = mag_azimuth; Lab arrow dip = 90-field_dip
-            [4] lab azimuth and dip are same as mag_azimuth, field_dip : use this for unoriented samples too
-            [5] Same as AZDIP convention explained below -
-                azimuth and inclination of the drill direction are mag_azimuth and field_dip;
-                lab arrow is as in [1] above.
-                lab azimuth is same as mag_azimuth,lab arrow dip=field_dip-90
-            [6] Lab arrow azimuth = mag_azimuth-90; Lab arrow dip = 90-field_dip
-       Returns:
-       ___________
-           azimuth and dip of lab arrow
-
+        [1] Standard Pomeroy convention of azimuth and hade (degrees from vertical down)
+            of the drill direction (field arrow).  lab arrow azimuth= sample_azimuth = mag_azimuth;
+            lab arrow dip = sample_dip =-field_dip. i.e. the lab arrow dip is minus the hade.
+        [2] Field arrow is the strike  of the plane orthogonal to the drill direction,
+            Field dip is the hade of the drill direction.  Lab arrow azimuth = mag_azimuth-90
+            Lab arrow dip = -field_dip
+        [3] Lab arrow is the same as the drill direction;
+            hade was measured in the field.
+            Lab arrow azimuth = mag_azimuth; Lab arrow dip = 90-field_dip
+        [4] lab azimuth and dip are same as mag_azimuth, field_dip : use this for unoriented samples too
+        [5] Same as AZDIP convention explained below -
+            azimuth and inclination of the drill direction are mag_azimuth and field_dip;
+            lab arrow is as in [1] above.
+            lab azimuth is same as mag_azimuth,lab arrow dip=field_dip-90
+        [6] Lab arrow azimuth = mag_azimuth-90; Lab arrow dip = 90-field_dip
+        
+    Returns
+    -------
+    azimuth and dip of lab arrow
     """
     or_con = str(or_con)
     if mag_azimuth == -999:
@@ -1042,15 +1088,15 @@ def orient(mag_azimuth, field_dip, or_con):
 
 def get_Sb(data):
     """
-    Returns vgp scatter for data set.
+    Returns vgp scatter for a data set.
     
     Parameters
-    __________
-        data : data set as a list or a pandas dataframe 
+    ----------
+    data : data set as a list or a pandas dataframe 
     
     Returns
-    _______
-        float value of the vgp scatter
+    -------
+    float value of the vgp scatter
     """
     Sb, N = 0., 0.
     for rec in data:
@@ -1059,8 +1105,8 @@ def get_Sb(data):
             k = rec['average_k']
             L = rec['average_lat'] * np.pi / 180.  # latitude in radians
             Nsi = rec['average_nn']
-            K = old_div(k, (2. * (1. + 3. * np.sin(L)**2) /
-                            (5. - 3. * np.sin(L)**2)))
+            K = k / (2. * (1. + 3. * np.sin(L)**2) /
+                            (5. - 3. * np.sin(L)**2))
             Sw = 81. / np.sqrt(K)
         else:
             Sw, Nsi = 0, 1.
@@ -1074,19 +1120,19 @@ def get_sb_df(df, mm97=False):
     Calculates Sf for a dataframe with VGP Lat., and optional Fisher's k, site latitude and N information can be used to correct for within site scatter (McElhinny & McFadden, 1997)
 
     Parameters
-    _________
-        df : Pandas Dataframe with columns
-            REQUIRED:
-                vgp_lat :  VGP latitude
-            ONLY REQUIRED for MM97 correction:
-                dir_k : Fisher kappa estimate
-                dir_n : number of specimens (samples) per site
-                lat : latitude of the site
-        mm97 : if True, will do the correction for within site scatter
+    ----------
+    df : Pandas Dataframe with columns
+        REQUIRED:
+            vgp_lat :  VGP latitude
+        ONLY REQUIRED for MM97 correction:
+            dir_k : Fisher kappa estimate
+            dir_n : number of specimens (samples) per site
+            lat : latitude of the site
+    mm97 : if True, will do the correction for within site scatter
 
-    Returns:
-    _______
-        Sf : float value for the Sf
+    Returns
+    -------
+    Sf : float value for the Sf
     """
     df['delta'] = 90.-df.vgp_lat
     Sp2 = np.sum(df.delta**2)/(df.shape[0]-1)
@@ -1221,18 +1267,18 @@ def grade(PmagRec, ACCEPT, type, data_model=2.5):
 def flip(di_block, combine=False):
     """
     Determines 'normal' direction along the principle eigenvector, then flips 
-    the reverse mode to the antipode
+    the reverse mode to the antipode.
 
     Parameters
     ----------
-        di_block : nested list of directions
-        combine : whether to return directions as one di_block (default is False)
+    di_block : nested list of directions
+    combine : whether to return directions as one di_block (default is False)
         
     Returns
-    ---------
-        D1 : normal mode
-        D2 : flipped reverse mode as two DI blocks
-        If combine=True one combined D1 + D2 di_block will be returned
+    -------
+    D1 : normal mode
+    D2 : flipped reverse mode as two DI blocks
+    If combine=True one combined D1 + D2 di_block will be returned
     """
     ppars = doprinc(di_block)  # get principle direction
     if combine:
@@ -1259,17 +1305,17 @@ def dia_vgp(*args):  # new function interface by J.Holmes, SIO, 6/1/2011
     """
     Converts directional data (declination, inclination, alpha95) at a given
     location (Site latitude, Site longitude) to pole position (pole longitude,
-    pole latitude, dp, dm)
+    pole latitude, dp, dm).
 
     Parameters
     ----------
-        Takes input as (Dec, Inc, a95, Site latitude, Site longitude)
-        Input can be as individual values (5 parameters)
-        or
-        as a list of lists: [[Dec, Inc, a95, lat, lon],[Dec, Inc, a95, lat, lon]]
+    Takes input as (Dec, Inc, a95, Site latitude, Site longitude)
+    Input can be as individual values (5 parameters)
+    or
+    as a list of lists: [[Dec, Inc, a95, lat, lon],[Dec, Inc, a95, lat, lon]]
 
     Returns
-    ----------
+    -------
     if input is individual values for one pole the return is:
     pole longitude, pole latitude, dp, dm
 
@@ -1277,7 +1323,7 @@ def dia_vgp(*args):  # new function interface by J.Holmes, SIO, 6/1/2011
     list of pole longitudes, list of pole latitudes, list of dp, list of dm
     
     Examples
-    ________
+    --------
     >>> pmag.dia_vgp(4, 41, 0, 33, -117)
     (41.68629415047637, 79.86259998889103, 0.0, 0.0)
     """
@@ -1351,7 +1397,7 @@ def dia_vgp(*args):  # new function interface by J.Holmes, SIO, 6/1/2011
         if boolmask:
             plong = plong - 2 * np.pi
 
-    dm = np.rad2deg(a95 * (old_div(np.sin(p), np.cos(dip))))
+    dm = np.rad2deg(a95 * (np.sin(p) / np.cos(dip)))
     dp = np.rad2deg(a95 * (old_div((1 + 3 * (np.cos(p)**2)), 2)))
     plat = np.rad2deg(plat)
     plong = np.rad2deg(plong)
@@ -1360,6 +1406,8 @@ def dia_vgp(*args):  # new function interface by J.Holmes, SIO, 6/1/2011
 
 def int_pars(x, y, vds, **kwargs):
     """
+    Depreciated 9/7/2022 
+    
     Calculates York regression and paleointensity parameters (with Tauxe Fvds).
     """
     # first do linear regression a la York
@@ -1398,26 +1446,26 @@ def int_pars(x, y, vds, **kwargs):
         xy += x[i] * y[i]
         xsum += x[i]
         ysum += y[i]
-    xsig = np.sqrt(old_div((xx - (old_div(xsum**2., n))), (n - 1.)))
-    ysig = np.sqrt(old_div((yy - (old_div(ysum**2., n))), (n - 1.)))
+    xsig = np.sqrt((xx - (xsum**2 / n)) / (n - 1.))
+    ysig = np.sqrt((yy - (ysum**2 / n)) / (n - 1.))
     sum = 0
     for i in range(int(n)):
-        yer += (y[i] - old_div(ysum, n))**2.
-        xer += (x[i] - old_div(xsum, n))**2.
-        xyer += (y[i] - old_div(ysum, n)) * (x[i] - old_div(xsum, n))
-    slop = -np.sqrt(old_div(yer, xer))
+        yer += (y[i] - (ysum / n))**2.
+        xer += (x[i] - (xsum / n))**2.
+        xyer += (y[i] - (ysum / n)) * (x[i] - (xsum / n))
+    slop = -np.sqrt(yer / xer)
     pars[b_key] = slop
     s1 = 2. * yer - 2. * slop * xyer
     s2 = (n - 2.) * xer
-    sigma = np.sqrt(old_div(s1, s2))
+    sigma = np.sqrt(s1 / s2)
     pars[sigma_key] = sigma
-    s = old_div((xy - (xsum * ysum / n)), (xx - old_div((xsum**2.), n)))
-    r = old_div((s * xsig), ysig)
+    s = (xy - (xsum * ysum / n)) / (xx - (xsum**2 / n))
+    r = (s * xsig) / ysig
     pars["specimen_rsc"] = r**2.
     ytot = abs(ysum / n - slop * xsum / n)
     for i in range(int(n)):
-        xprime.append(old_div((slop * x[i] + y[i] - ytot), (2. * slop)))
-        yprime.append((old_div((slop * x[i] + y[i] - ytot), 2.)) + ytot)
+        xprime.append(((slop * x[i] + y[i] - ytot) / (2. * slop)))
+        yprime.append(((slop * x[i] + y[i] - ytot) / 2.) + ytot)
     sumdy, dy = 0, []
     dyt = abs(yprime[0] - yprime[int(n) - 1])
     for i in range((int(n) - 1)):
@@ -1460,7 +1508,25 @@ def get_curve(araiblock,**kwargs):
 
 def dovds(data):
     """
-    Calculates vector difference sum for demagnetization data
+    Calculates vector difference sum for demagnetization data.
+    
+    Parameters
+    ----------
+    data : nested array of data 
+    
+    Returns
+    -------
+    vds : vector difference of data as a float
+    
+    Examples
+    --------
+    >>> data = np.array([  [16.0,    43.0, 21620.33],
+           [30.5,    53.6, 12922.58],
+            [6.9,    33.2, 15780.08],
+          [352.5,    40.2, 33947.52], 
+          [354.2,    45.1, 19725.45]])
+    >>> pmag.dovds(data)
+    69849.6597634
     """
     vds, X = 0, []
     for rec in data:
@@ -1476,7 +1542,7 @@ def dovds(data):
 
 def vspec_magic(data):
     """
-    Takes average vector of replicate measurements
+    Takes average vector of replicate measurements.
     """
     vdata, Dirdata, step_meth = [], [], ""
     if len(data) == 0:
@@ -1525,8 +1591,7 @@ def vspec_magic(data):
                 vrec = data[i - 1]
                 vrec['measurement_dec'] = '%7.1f' % (dir[0])
                 vrec['measurement_inc'] = '%7.1f' % (dir[1])
-                vrec['measurement_magn_moment'] = '%8.3e' % (
-                    old_div(R, (i - k + 1)))
+                vrec['measurement_magn_moment'] = '%8.3e' % (R / (i - k + 1))
                 vrec['measurement_csd'] = '%7.1f' % (Fpars['csd'])
                 vrec['measurement_positions'] = '%7.1f' % (Fpars['n'])
                 vrec['measurement_description'] = 'average of multiple measurements'
@@ -1552,7 +1617,7 @@ def vspec_magic(data):
 
 def vspec_magic3(data):
     """
-    Takes average vector of replicate measurements
+    Takes average vector of replicate measurements.
     """
     vdata, Dirdata, step_meth = [], [], ""
     if len(data) == 0:
@@ -1603,7 +1668,7 @@ def vspec_magic3(data):
                 vrec = data[i - 1]
                 vrec['dir_dec'] = '%7.1f' % (dir[0])
                 vrec['dir_inc'] = '%7.1f' % (dir[1])
-                vrec['magn_moment'] = '%8.3e' % (old_div(R, (i - k + 1)))
+                vrec['magn_moment'] = '%8.3e' % (R / (i - k + 1))
                 vrec['dir_csd'] = '%7.1f' % (Fpars['csd'])
                 vrec['meas_n_orient'] = '%7.1f' % (Fpars['n'])
                 descr=vrec['description']+': average of multiple measurements'
@@ -1632,7 +1697,7 @@ def vspec_magic3(data):
 
 def get_specs(data):
     """
-    Takes a magic format file and returns a list of unique specimen names
+    Takes a magic format file and returns a list of unique specimen names.
     """
     # sort the specimen names
     speclist = []
@@ -1652,14 +1717,29 @@ def vector_mean(data):
     Calculates the vector mean of a given set of vectors.
     
     Parameters
-    __________
-        data :  nested array of [dec,inc,intensity]
+    ----------
+    data :  nested array of [dec,inc,intensity]
 
     Returns
-    _______
-        dir : array of [dec, inc, 1]
-        R : resultant vector length
-
+    -------
+    dir : array of [dec, inc, 1]
+    R : resultant vector length
+    
+    Examples 
+    --------
+    >>> data=np.loadtxt('data_files/vector_mean/vector_mean_example.dat')
+    >>> Dir,R=pmag.vector_mean(data)
+    >>> data.shape[0],Dir[0],Dir[1],R  
+    (100, 1.2702459152657795, 49.62123008281823, 2289431.9813831896)
+    
+    >>> data = np.array([[16.0,    43.0, 21620.33],
+           [30.5,    53.6, 12922.58],
+            [6.9,    33.2, 15780.08],
+          [352.5,    40.2, 33947.52], 
+          [354.2,    45.1, 19725.45]])
+    >>> pmag.vector_mean(data)
+    (array([ 3.875568482416763, 43.02570375878505 ,  1.]),
+     102107.93048882612)
     """
     Xbar = np.zeros((3))
     X = dir2cart(data).transpose()
@@ -1673,6 +1753,8 @@ def vector_mean(data):
 
 def mark_dmag_rec(s, ind, data):
     """
+    Depreciated 9/14/2022
+    
     Edits demagnetization data to mark "bad" points with measurement_flag.
     """
     datablock = []
@@ -1708,22 +1790,23 @@ def find_dmag_rec(s, data, **kwargs):
     kinds of experiments and "bad" measurements.
 
     Parameters
-    __________
-        s : specimen name
-        data : DataFrame with measurement data
-        **kwargs :
-            version : if not 3, assume data model = 2.5
+    ----------
+    s : specimen name
+    data : DataFrame with measurement data
+    **kwargs :
+        version : if not 3, assume data model = 2.5
+        
     Returns
-    ________
-        datablock : nested list of data for zijderveld plotting
-             [[tr, dec, inc, int, ZI, flag],...]
-             tr : treatment step
-             dec : declination
-             inc : inclination
-             int : intensity
-             ZI : whether zero-field first or infield-first step
-             flag : g or b , default is set to 'g'
-         units : list of units found ['T','K','J'] for tesla, kelvin or joules
+    -------
+    datablock : nested list of data for zijderveld plotting
+        [[tr, dec, inc, int, ZI, flag],...]
+        tr : treatment step
+        dec : declination
+        inc : inclination
+        int : intensity
+        ZI : whether zero-field first or infield-first step
+        flag : g or b , default is set to 'g'
+    units : list of units found ['T','K','J'] for tesla, kelvin or joules
     """
     if 'version' in list(kwargs.keys()) and kwargs['version'] == 3:
         # convert dataframe to list of dictionaries
@@ -1830,14 +1913,14 @@ def open_file(infile, verbose=True):
     Try to use utf-8 encoding, and if that fails use Latin-1.
 
     Parameters
-    __________
-        infile : str
-            full path to file
+    ----------
+    infile : str
+        full path to file
 
     Returns
-    _______
-        data: list
-            all lines in the file
+    -------
+    data: list
+        all lines in the file
     """
     try:
         with codecs.open(infile, "r", "utf-8") as f:
@@ -1878,14 +1961,14 @@ def magic_read(infile, data=None, return_keys=False, verbose=False):
     Reads a Magic template file, returns data in a list of dictionaries.
 
     Parameters
-    ___________
-        Required:
-            infile : the MagIC formatted tab delimited data file
-                first line contains 'tab' in the first column and the data file type in the second (e.g., measurements, specimen, sample, etc.)
-        Optional:
-            data : data read in with, e.g., file.readlines()
+    ----------
+    Required:
+        infile : the MagIC formatted tab delimited data file
+            first line contains 'tab' in the first column and the data file type in the second (e.g., measurements, specimen, sample, etc.)
+    Optional:
+        data : data read in with, e.g., file.readlines()
     Returns
-    _______
+    -------
         list of dictionaries, file type
     """
     if infile:
@@ -1993,8 +2076,8 @@ def magic_read(infile, data=None, return_keys=False, verbose=False):
 
 def magic_read_dict(path, data=None, sort_by_this_name=None, return_keys=False):
     """
-    Read a magic-formatted tab-delimited file and returns a dictionary of
-    dictionaries, with this format:
+    Read a magic-formatted tab-delimited file and returns a dictionary of dictionaries, with this format:
+    
     {'Z35.5a': {'specimen_weight': '1.000e-03', 'er_citation_names': 'This study', 'specimen_volume': '', 'er_location_name': '', 'er_site_name': 'Z35.', 'er_sample_name': 'Z35.5', 'specimen_class': '', 'er_specimen_name': 'Z35.5a', 'specimen_lithology': '', 'specimen_type': ''}, ....}
     return data, file_type, and keys (if return_keys is true)
     """
@@ -2054,7 +2137,17 @@ def magic_read_dict(path, data=None, sort_by_this_name=None, return_keys=False):
 
 def sort_magic_data(magic_data, sort_name):
     """
-    Sort magic_data by header (like er_specimen_name for example)
+    Sort magic_data by header.
+    
+    Parameters
+    ----------
+    magic_data : table from a MagIC upload (or downloaded) txt file
+    sort_name : str
+        name of header to sort by, ('er_specimen_name' for example)
+    
+    Returns 
+    -------
+    magic_data : sorted table by indicated sort_name
     """
     magic_data_sorted = {}
     for rec in magic_data:
@@ -2067,8 +2160,10 @@ def sort_magic_data(magic_data, sort_name):
 
 def upload_read(infile, table):
     """
-    Reads a table from a MagIC upload (or downloaded) txt file, puts data in a
-    list of dictionaries
+    Depreciated 9/14/2022
+    
+    Reads a table from a MagIC upload (or downloaded) txt file and puts data in a
+    list of dictionaries.
     """
     delim = 'tab'
     hold, magic_data, magic_record, magic_keys = [], [], {}, []
@@ -2114,7 +2209,7 @@ def upload_read(infile, table):
 
 def putout(ofile, keylist, Rec):
     """
-    Writes out a magic format record to ofile
+    Writes out a magic format record to ofile.
     """
     pmag_out = open(ofile, 'a')
     outstring = ""
@@ -2131,7 +2226,11 @@ def putout(ofile, keylist, Rec):
 
 def first_rec(ofile, Rec, file_type):
     """
-    Opens the file ofile as a magic template file with headers as the keys to Rec
+    Opens the file ofile as a magic template file with headers as the keys to Rec.
+    
+    Parameters
+    ----------
+    ofile : string with the path of the input file
     """
     keylist = []
     opened = False
@@ -2157,16 +2256,17 @@ def first_rec(ofile, Rec, file_type):
 
 def magic_write_old(ofile, Recs, file_type):
     """
-    Writes out a magic format list of dictionaries to ofile
+    Writes out a magic format list of dictionaries to ofile.
 
     Parameters
-    _________
+    ----------
     ofile : path to output file
     Recs : list of dictionaries in MagIC format, or Pandas Dataframe
     file_type : MagIC table type (e.g., specimens)
 
-    Effects :
-        writes a MagIC formatted file from Recs
+    Effects
+    -------
+    writes a MagIC formatted file from Recs
     """
     if len(Recs) < 1:
         print ('nothing to write')
@@ -2202,25 +2302,27 @@ def magic_write_old(ofile, Recs, file_type):
 
 def magic_write(ofile, Recs, file_type, dataframe=False,append=False):
     """
+    Writes out a magic format list of dictionaries to ofile.
+
     Parameters
-    _________
-        ofile : path to output file
-        Recs : list of dictionaries in MagIC format OR pandas dataframe
-        file_type : MagIC table type (e.g., specimens)
-        dataframe : boolean
-            if True, Recs is a pandas dataframe which must be converted
-               to a list of dictionaries
-        append : boolean
+    ----------
+    ofile : path to output file
+    Recs : list of dictionaries in MagIC format OR pandas dataframe
+    file_type : MagIC table type (e.g., specimens)
+    dataframe : boolean
+        if True, Recs is a pandas dataframe which must be converted
+            to a list of dictionaries
+    append : boolean
         if True, file will be appended to named file
 
     Returns
-    ______
-        [True,False] : True if successful
-        ofile : same as input
+    -------
+    [True,False] : True if successful
+    ofile : same as input
 
     Effects
-    ______
-        writes a MagIC formatted file from Recs
+    -------
+    writes a MagIC formatted file from Recs
     """
     if len(Recs) < 1:
         print('No records to write to file {}'.format(ofile))
@@ -2276,18 +2378,18 @@ def dotilt(dec, inc, bed_az, bed_dip):
     and bedding dip.
 
     Parameters
-    __________
-        dec : declination directions in degrees
-        inc : inclination direction in degrees
-        bed_az : bedding dip direction
-        bed_dip : bedding dip
+    ----------
+    dec : declination directions in degrees
+    inc : inclination direction in degrees
+    bed_az : bedding dip direction
+    bed_dip : bedding dip
 
     Returns
-    _______
-        dec,inc : a tuple of rotated dec, inc values
+    -------
+    dec,inc : a tuple of rotated dec, inc values
 
     Examples
-    ________
+    --------
     >>> pmag.dotilt(91.2,43.1,90.0,20.0)
     (90.952568837153436, 23.103411670066617)
     """
@@ -2313,13 +2415,19 @@ def dotilt_V(indat):
     Does a tilt correction on an array with rows of dec,inc bedding dip direction and dip.
 
     Parameters
-    __________
-        input : declination, inclination, bedding dip direction and bedding dip
-        nested array of [[dec1, inc1, bed_az1, bed_dip1],[dec2,inc2,bed_az2,bed_dip2]...]
+    ----------
+    indat : nested array of [[dec1, inc1, bed_az1, bed_dip1],[dec2,inc2,bed_az2,bed_dip2]...]
+        declination, inclination, bedding dip direction and bedding dip
 
     Returns
-    _______
-        dec,inc : arrays of rotated declination, inclination
+    -------
+    dec, inc : arrays of rotated declination, inclination
+        
+    Examples
+    --------
+    >>> pmag.dotilt_V(np.array([[91.2,43.1,90.0,20.0],[92.0,40.4,90.5,21.3]]))
+    (array([90.95256883715344, 91.70884991139725]),
+     array([23.103411670066613, 19.105747819853423]))
     """
     indat = indat.transpose()
     # unpack input array into separate arrays
@@ -2351,16 +2459,16 @@ def dogeo(dec, inc, az, pl):
     azimuth and plunge of the X direction (lab arrow) of a specimen.
 
     Parameters
-    __________
-        dec : declination in specimen coordinates
-        inc : inclination in specimen coordinates
+    ----------
+    dec : declination in specimen coordinates
+    inc : inclination in specimen coordinates
 
     Returns
-    _______
-        rotated_direction : tuple of declination, inclination in geographic coordinates
+    -------
+    rotated_direction : tuple of declination, inclination in geographic coordinates
 
     Examples
-    ________
+    --------
     >>> pmag.dogeo(0.0,90.0,0.0,45.5)
     (180.0, 44.5)
     """
@@ -2393,12 +2501,20 @@ def dogeo_V(indat):
     azimuth and plunge of the X direction (lab arrow) of a specimen.
 
     Parameters
-    __________
-        indat: nested list of [dec, inc, az, pl] data
+    ----------
+    indat : array of lists 
+        data format: [dec, inc, az, pl] 
 
     Returns
-    _______
-        rotated_directions : arrays of Declinations and Inclinations
+    -------
+    two arrays : 
+        an array of declinations
+        an array of inclinations
+        
+    Examples
+    --------
+    >>> pmag.dogeo_V(np.array([[0.0,90.0,0.0,45.5],[0.0,90.0,0.0,45.5]]))
+    (array([180., 180.]), array([44.5, 44.5]))
     """
     indat = indat.transpose()
     # unpack input array into separate arrays
@@ -2429,21 +2545,21 @@ def dogeo_V(indat):
 def dodirot(D, I, Dbar, Ibar):
     """
     Rotate a direction (declination, inclination) by the difference between
-    dec=0 and inc = 90 and the provided desired mean direction.
+    dec = 0 and inc = 90 and the provided desired mean direction.
 
     Parameters
-    __________
-        D : declination to be rotated
-        I : inclination to be rotated
-        Dbar : declination of desired mean
-        Ibar : inclination of desired mean
+    ----------
+    D : declination to be rotated
+    I : inclination to be rotated
+    Dbar : declination of desired mean
+    Ibar : inclination of desired mean
 
     Returns
-    _______
-        drot, irot : rotated declination and inclination
+    -------
+    drot, irot : rotated declination and inclination
         
     Examples
-    ________
+    --------
     >>> pmag.dodirot(0,90,5,85)
     (5.0, 85.0)
     """
@@ -2458,22 +2574,26 @@ def dodirot(D, I, Dbar, Ibar):
 
 def dodirot_V(di_block, Dbar, Ibar):
     """
-    Rotate an array of dec/inc pairs to coordinate system with Dec,Inc as 0,90
+    Rotate an array of dec/inc pairs to coordinate system with Dec, Inc as 0, 90.
 
     Parameters
-    ___________________
-        di_block : array of [[Dec1,Inc1],[Dec2,Inc2],....]
-        Dbar : declination of desired center
-        Ibar : inclination of desired center
+    ----------
+    di_block : array of [[Dec1,Inc1],[Dec2,Inc2],....]
+    Dbar : Declination of desired center
+    Ibar : Inclination of desired center
 
     Returns
-    __________
-        array of rotated decs and incs: [[rot_Dec1,rot_Inc1],[rot_Dec2,rot_Inc2],....]
+    -------
+    array 
+        Rotated decs and incs: [[rot_Dec1,rot_Inc1],[rot_Dec2,rot_Inc2],....]
     
     Examples
-    ________
+    --------
     >>> di_block = np.array([[0,90],[0,92],[0,92]])
-    pmag.dodirot_V(di_block,5,93)
+    >>> pmag.dodirot_V(di_block,5,93)
+    array([[185.              ,  87.00000000000009],
+       [194.81338201697608,  88.97743662195866],
+       [194.81338201697608,  88.97743662195866]])
     """
     N = di_block.shape[0]
     DipDir, Dip = np.ones(N, dtype=np.float).transpose(
@@ -2487,7 +2607,7 @@ def dodirot_V(di_block, Dbar, Ibar):
 
 def find_samp_rec(s, data, az_type):
     """
-    find the orientation info for samp s
+    Find the orientation info for samp s
     """
     datablock, or_error, bed_error = [], 0, 0
     orient = {}
@@ -2529,7 +2649,9 @@ def find_samp_rec(s, data, az_type):
 
 def vspec(data):
     """
-    Takes the vector mean of replicate measurements at a given step
+    Depreciated 9/14/2022
+    
+    Takes the vector mean of replicate measurements at a given step.
     """
     vdata, Dirdata, step_meth = [], [], []
     tr0 = data[0][0]  # set beginning treatment
@@ -2545,8 +2667,7 @@ def vspec(data):
                 for l in range(k - 1, i):
                     Dirdata.append([data[l][1], data[l][2], data[l][3]])
                 dir, R = vector_mean(Dirdata)
-                vdata.append([data[i - 1][0], dir[0], dir[1],
-                              old_div(R, (i - k + 1)), '1', 'g'])
+                vdata.append([data[i - 1][0], dir[0], dir[1], R / (i - k + 1), '1', 'g'])
                 step_meth.append("DE-VM")
             tr0 = data[i][0]
             k = i + 1
@@ -2561,15 +2682,17 @@ def Vdiff(D1, D2):
     Calculates the vector difference between two directions D1, D2.
     
     Parameters
-    __________
-        D1 : Direction 1 as an array of [declination, inclination] pair or pairs
-        D2 : Direction 2 as an array of [declination, inclination] pair or pairs
+    ----------
+    D1 : Direction 1 as an array of [declination, inclination] pair or pairs
+    D2 : Direction 2 as an array of [declination, inclination] pair or pairs
+    
     Returns
-    _______
-        an array that is the vector difference between D1 and D2
+    ------
+    array 
+        The vector difference between D1 and D2
         
     Examples
-    ________
+    --------
     >>> pmag.Vdiff([350.0,10.0],[320.0,20.0])
     array([ 60.00000000000001 , -18.61064009110688 ,   0.527588019973717])
     """
@@ -2586,18 +2709,22 @@ def angle(D1, D2):
     Calculate the angle between two directions.
 
     Parameters
-    __________
-        D1 : Direction 1 as an array of [declination, inclination] pair or pairs
-        D2 : Direction 2 as an array of [declination, inclination] pair or pairs
+    ----------
+    D1 : Direction 1 as an array of [declination, inclination] pair or pairs
+    D2 : Direction 2 as an array of [declination, inclination] pair or pairs
 
     Returns
-    _______
-        angle : angle between the directions as a single-element array
+    -------
+    angle : single-element array 
+        angle between the input directions
 
     Examples
-    ________
+    --------
     >>> pmag.angle([350.0,10.0],[320.0,20.0])
     array([ 30.59060998])
+    
+    >>> pmag.angle([[350.0,10.0],[320.0,20.0]],[[345,13],[340,14]])
+    array([ 5.744522410794302, 20.026413431433475])
     """
     D1 = np.array(D1)
     if len(D1.shape) > 1:
@@ -2622,18 +2749,18 @@ def angle(D1, D2):
 
 def cart2dir(cart):
     """
-    Converts a direction in cartesian coordinates into declination, inclinations
+    Converts a direction in cartesian coordinates into declinations and inclination.
 
     Parameters
-    __________
-        cart : input list of [x,y,z] or list of lists [[x1,y1,z1],[x2,y2,z2]...]
+    ----------
+    cart : list of [x,y,z] or list of lists [[x1,y1,z1],[x2,y2,z2]...]
 
     Returns
-    _______
-        direction_array : returns an array of [declination, inclination, intensity]
+    -------
+    direction_array : array of [declination, inclination, intensity]
 
     Examples
-    ________
+    --------
     >>> pmag.cart2dir([0,1,0])
     array([ 90.,   0.,   1.])
     """
@@ -2652,32 +2779,34 @@ def cart2dir(cart):
     Rs = np.sqrt(Xs**2 + Ys**2 + Zs**2)  # calculate resultant vector length
     # calculate declination taking care of correct quadrants (arctan2) and
     # making modulo 360.
-    Decs = (old_div(np.arctan2(Ys, Xs), rad)) % 360.
+    Decs = (np.arctan2(Ys, Xs) / rad) % 360.
     try:
         # calculate inclination (converting to degrees) #
-        Incs = old_div(np.arcsin(old_div(Zs, Rs)), rad)
+        Incs = np.arcsin(Zs / Rs) / rad
     except:
         print('trouble in cart2dir')  # most likely division by zero somewhere
         return np.zeros(3)
-
-    return np.array([Decs, Incs, Rs]).transpose()  # return the directions list
+    
+    direction_array = np.array([Decs, Incs, Rs]).transpose()  # directions list
+    
+    return direction_array  # return the directions list
 
 
 def tauV(T):
     """
-    Gets the eigenvalues (tau) and eigenvectors (V) from 3x3 matrix T
+    Gets the eigenvalues (tau) and eigenvectors (V) from 3x3 matrix T.
     
     Parameters
-    __________
-        T : 3x3 matrix 
+    ----------
+    T : 3x3 matrix 
         
     Returns
-    _______
-        tau : eigenvalues for the given matrix (T)
-        V : eigenvectors for the given matrix (T)
+    -------
+    t : eigenvalues for the given matrix (T)
+    V : eigenvectors for the given matrix (T)
         
     Examples 
-    ________
+    --------
     >>> T = [[2,4,6],
              [10,2,5],
              [1,7,8]]
@@ -2703,7 +2832,7 @@ def tauV(T):
         tr += tau
     if tr != 0:
         for i in range(3):
-            evalues[i] = old_div(evalues[i], tr)
+            evalues[i] = evalues[i] / tr
     else:
         return t, V
 # sort evalues,evectors
@@ -2727,7 +2856,21 @@ def tauV(T):
 
 def Tmatrix(X):
     """
-    gets the orientation matrix (T) from data in X
+    Gets the orientation matrix (T) from data in X.
+    
+    Parameters
+    ----------
+    X : nested lists of input data 
+    
+    Returns
+    -------
+    T : orientation matrix as a nested list
+    
+    Examples 
+    --------
+    >>> X = [[1., 0.8, 5.], [0.5, 0.2, 2.], [1.4, 0.6, 0.1]]
+    >>> pmag.Tmatrix(X)
+    [[3.21, 1.74, 6.14], [1.74, 1.04, 4.46], [6.14, 4.46, 29.01]]
     """
     T = [[0., 0., 0.], [0., 0., 0.], [0., 0., 0.]]
     for row in X:
@@ -2743,22 +2886,36 @@ def dir2cart(d):
     inclination) to an array of the direction in cartesian coordinates (x,y,z).
 
     Parameters
-    __________
-        d : list or array of [dec,inc] or [dec,inc,intensity]
+    ----------
+    d : list or array of [dec,inc] or [dec,inc,intensity]
 
     Returns
-    _______
-        cart : array of [x,y,z]
+    -------
+    cart : array of [x,y,z]
 
     Examples
-    ________
+    --------
     >>> pmag.dir2cart([200,40,1])
     array([-0.71984631, -0.26200263,  0.64278761])
+    
+    >>> pmag.dir2cart([200,40])
+    array([[-0.719846310392954, -0.262002630229385,  0.642787609686539]])
+    
+    >>> data = np.array([  [16.0,    43.0, 21620.33],
+           [30.5,    53.6, 12922.58],
+            [6.9,    33.2, 15780.08],
+          [352.5,    40.2, 33947.52], 
+          [354.2,    45.1, 19725.45]])
+    >>> pmag.dir2cart(data)
+    array([[15199.574113612794 ,  4358.407742577491 , 14745.029604010038 ],
+       [ 6607.405832448041 ,  3892.0594770716   , 10401.304487835589 ],
+       [13108.574245285025 ,  1586.3117853121191,  8640.591471770322 ],
+       [25707.154931463603 , -3384.411152593326 , 21911.687763162565 ],
+       [13852.355235322588 , -1407.0709331498472, 13972.322052043308 ]])
     """
-    ints = np.ones(len(d)).transpose(
-    )  # get an array of ones to plug into dec,inc pairs
-    d = np.array(d).astype('float')
     rad = np.pi/180.
+    ints = np.ones(len(d)).transpose()  # get an array of ones to plug into dec,inc pairs
+    d = np.array(d).astype('float')
     if len(d.shape) > 1:  # array of vectors
         decs, incs = d[:, 0] * rad, d[:, 1] * rad
         if d.shape[1] == 3:
@@ -2778,21 +2935,33 @@ def dir2cart(d):
 
 def dms2dd(d):
     """
-    Converts a list or array degree, minute, second locations to an array of decimal degrees. 
+    Converts a list or array of degree, minute, second locations to an array of decimal degrees. 
     
     Parameters
-    __________
-        d : list or array of [deg, min, sec]
+    ----------
+    d : list or array of [deg, min, sec]
+    
     Returns
-    _______
-        d : input list or array and its corresponding
-        dd : decimal degree
+    -------
+    d : input list or array 
+    dd : int 
+        decimal degree corresponding to d
         
     Examples
-    ________
+    --------
     >>> pmag.dms2dd([60,35,15])
     60 35 15
     array(60.587500000000006)
+    
+    >>> data = np.array([  [16.0,    43.0, 33],
+           [30.5,    53.6, 58],
+            [6.9,    33.2, 8],
+          [352.5,    40.2, 52], 
+          [354.2,    45.1, 45]])
+    >>> pmag.dms2dd(data)
+    [ 16.   30.5   6.9 352.5 354.2] [43.  53.6 33.2 40.2 45.1] [33. 58.  8. 52. 45.]
+array([ 16.72583333333333 ,  31.409444444444446,   7.455555555555557,
+       353.18444444444447 , 354.96416666666664 ])
     """
     # converts list or array of degree, minute, second locations to array of
     # decimal degrees
@@ -2803,13 +2972,30 @@ def dms2dd(d):
     else:  # single vector
         degs, mins, secs = np.array(d[0]), np.array(d[1]), np.array(d[2])
         #print(degs, mins, secs)
-    dd = np.array(degs + old_div(mins, 60.) + old_div(secs, 3600.)).transpose()
+    dd = np.array(degs + (mins / 60.0) + (secs / 3600.0)).transpose()
     return dd
 
 
 def findrec(s, data):
     """
-    finds all the records belonging to s in data
+    Finds all the records belonging to s in data.
+    
+    Parameters
+    ----------
+    s : str
+        data value of interest
+    data : nested list of data 
+        eg. [[treatment,dec,inc,int,quality],...]
+    
+    Returns
+    -------
+    datablock : nested list of data relating to s
+    
+    Examples 
+    --------
+    >>> data = [['treatment','dec','inc','int','quality'],['treatment1','dec1','inc1','int1','quality1']]
+    >>> pmag.findrec('treatment', data)
+    [['dec', 'inc', 'int', 'quality']]
     """
     datablock = []
     for rec in data:
@@ -2820,12 +3006,12 @@ def findrec(s, data):
 
 def domean(data, start, end, calculation_type):
     """
-    Gets average direction using Fisher or principal component analysis (line
-    or plane) methods
+    Gets average direction using Fisher or principal component analysis (line or plane) methods.
 
     Parameters
     ----------
-    data : nest list of data: [[treatment,dec,inc,int,quality],...]
+    data : nest list of data
+        eg. [[treatment,dec,inc,int,quality],...]
     start : step being used as start of fit (often temperature minimum)
     end : step being used as end of fit (often temperature maximum)
     calculation_type : string describing type of calculation to be made
@@ -2834,8 +3020,8 @@ def domean(data, start, end, calculation_type):
 
     Returns
     -------
-    mpars : dictionary with the keys "specimen_n","measurement_step_min",
-    "measurement_step_max","specimen_mad","specimen_dec","specimen_inc"
+    mpars : dictionary 
+        The keys within are "specimen_n","measurement_step_min", "measurement_step_max","specimen_mad","specimen_dec","specimen_inc".
     """
     mpars = {}
     datablock = []
@@ -2900,7 +3086,7 @@ def domean(data, start, end, calculation_type):
 #
     for cart in X:
         for l in range(3):
-            cm[l] += old_div(cart[l], Nrec)
+            cm[l] += cart[l] / Nrec
     mpars["center_of_mass"] = cm
 
 #
@@ -2940,7 +3126,7 @@ def domean(data, start, end, calculation_type):
         mpars["measurement_step_max"] = indata[end0][0]
         mpars["center_of_mass"] = cm
         s1 = np.sqrt(t[0])
-        MAD = old_div(np.arctan(old_div(np.sqrt(t[1] + t[2]), s1)), rad)
+        MAD = np.arctan(np.sqrt(t[1] + t[2]) / s1) / rad
         if np.iscomplexobj(MAD):
             MAD = MAD.real
         # I think this is how it is done - i never anchor the "PCA" - check
@@ -3005,25 +3191,26 @@ def domean(data, start, end, calculation_type):
 
 def circ(dec, dip, alpha,npts=201):
     """
-    Calculates points on an circle about dec, dip with angle alpha.
+    Calculates points on an circle about dec and dip with angle alpha.
 
     Parameters
-    ___________
-        dec : float
-            declination of vector
-        dip : float
-            dip of vector
-        alpha : float
-            angle of small circle - 90 if vector  is pole to great circle
-        npts : int
-            number of points on the circle
+    ----------
+    dec : float
+        declination of vector
+    dip : float
+        dip of vector
+    alpha : float
+        angle of small circle - 90 if vector is pole to great circle
+    npts : int
+        number of points on the circle, default 201
+    
     Returns
-    _______
-        D_out, V_out : list
-            declinations and inclinations along small (great) circle about dec, dip
+    -------
+    D_out, I_out : list
+        declinations and inclinations along small (great) circle about dec, dip
             
     Examples
-    ________
+    --------
     >>> pmag.circ(50,10,10,5)
     ([60.15108171104812,
       50.0,
@@ -3173,7 +3360,7 @@ def PintPars(datablock, araiblock, zijdblock, start, end, accept, **kwargs):
     for k in range(len(first_Z) - 1):
         for l in range(k):
             # only go down to 10% of NRM.....
-            if old_div(first_Z[k][3], vds) > 0.1:
+            if (first_Z[k][3] / vds) > 0.1:
                 irec = first_I[l]
                 if irec[4] == 1 and first_I[l + 1][4] == 0:  # a ZI step
                     xzi = irec[3]
@@ -3210,7 +3397,7 @@ def PintPars(datablock, araiblock, zijdblock, start, end, accept, **kwargs):
                  )  # Watson test for common mean
             nf = 2. * (dup['n'] - 2.)  # number of degees of freedom
             ftest = fcalc(2, nf)
-            Frat = old_div(F, ftest)
+            Frat = F / ftest
             if Frat > 1.:
                 ZigZag = Frat  # fails zigzag on directions
                 methcode = "SM-FTEST"
@@ -3389,8 +3576,8 @@ def PintPars(datablock, araiblock, zijdblock, start, end, accept, **kwargs):
 
     for k in range(len(NRMs)):
         index_pTRMs = PTRMs_temperatures.index(NRMs[k][0])
-        x_Arai.append(old_div(PTRMs[index_pTRMs][3], NRM))
-        y_Arai.append(old_div(NRMs[k][3], NRM))
+        x_Arai.append(PTRMs[index_pTRMs][3] / NRM)
+        y_Arai.append(NRMs[k][3] / NRM)
         t_Arai.append(NRMs[k][0])
         if NRMs[k][4] == 1:
             steps_Arai.append('ZI')
@@ -3421,9 +3608,8 @@ def PintPars(datablock, araiblock, zijdblock, start, end, accept, **kwargs):
 
                         index_zerofield = zerofield_temperatures.index(
                             ptrm_checks[k][0])
-                        x_ptrm_check.append(old_div(ptrm_checks[k][3], NRM))
-                        y_ptrm_check.append(
-                            old_div(zerofields[index_zerofield][3], NRM))
+                        x_ptrm_check.append(ptrm_checks[k][3] / NRM)
+                        y_ptrm_check.append(zerofields[index_zerofield][3] / NRM)
                         ptrm_checks_temperatures.append(ptrm_checks[k][0])
 
                         break
@@ -3462,10 +3648,8 @@ def PintPars(datablock, araiblock, zijdblock, start, end, accept, **kwargs):
 
                         index_infield = infield_temperatures.index(
                             ptrm_tail[k][0])
-                        x_tail_check.append(
-                            old_div(infields[index_infield][3], NRM))
-                        y_tail_check.append(
-                            old_div(ptrm_tail[k][3], NRM) + old_div(zerofields[index_infield][3], NRM))
+                        x_tail_check.append(infields[index_infield][3] / NRM)
+                        y_tail_check.append((ptrm_tail[k][3] / NRM) + (zerofields[index_infield][3] / NRM))
                         tail_check_temperatures.append(ptrm_tail[k][0])
 
                         break
@@ -3545,13 +3729,13 @@ def PintPars(datablock, araiblock, zijdblock, start, end, accept, **kwargs):
 
         # lower bounding line of the 'beta box'
         # y=intercept1+slop1x
-        slop1 = old_div(a1, ((old_div(a2, b2))))
+        slop1 = a1 / (a2 / b2)
         intercept1 = a1
 
         # higher bounding line of the 'beta box'
         # y=intercept2+slop2x
 
-        slop2 = old_div(a2, ((old_div(a1, b1))))
+        slop2 = a2 / (a1 / b1)
         intercept2 = a2
 
         pars['specimen_scat_bounding_line_high'] = [intercept2, slop2]
@@ -3778,21 +3962,21 @@ def getkeys(table):
         keys.append("measurement_csd")
     return keys
 
-
-def getnames():
-    """
-    get mail names
-    """
-    namestring = ""
-    addmore = 1
-    while addmore:
-        scientist = input("Enter  name  - <Return> when done ")
-        if scientist != "":
-            namestring = namestring + ":" + scientist
-        else:
-            namestring = namestring[1:]
-            addmore = 0
-    return namestring
+# commented out as of 8/18/22
+#def getnames():
+#    """
+#    get mail names
+#    """
+#    namestring = ""
+#    addmore = 1
+#    while addmore:
+#        scientist = input("Enter  name  - <Return> when done ")
+#        if scientist != "":
+#            namestring = namestring + ":" + scientist
+#        else:
+#            namestring = namestring[1:]
+#            addmore = 0
+#    return namestring
 
 
 def magic_help(keyhelp):
@@ -3800,15 +3984,17 @@ def magic_help(keyhelp):
     Returns a help message for a given magic key.
     
     Parameters
-    __________
-        keyhelp : str
-            key name that the user seeks more information about
+    ----------
+    keyhelp : str
+        key name that the user seeks more information about
+        
     Returns
-    _______
-        Str with more information about the input key
+    -------
+    str 
+        Information about the input key
     
     Examples
-    ________
+    --------
     >>> pmag.magic_help('location_url')
     'Website URL for the location explicitly'
     """
@@ -4119,16 +4305,23 @@ def dosundec(sundata):
     Returns the declination for a given set of suncompass data.
     
     Parameters
-    __________
-      sundata : dictionary with these keys:
-          date: time string with the format 'yyyy:mm:dd:hr:min'
-          delta_u: time to SUBTRACT from local time for Universal time
-          lat: latitude of location (negative for south)
-          lon: longitude of location (negative for west)
-          shadow_angle: shadow angle of the desired direction with respect to the sun.
+    ----------
+    sundata : dictionary with these keys:
+        date: time string with the format 'yyyy:mm:dd:hr:min'
+        delta_u: time to SUBTRACT from local time for Universal time
+        lat: latitude of location (negative for south)
+        lon: longitude of location (negative for west)
+        shadow_angle: shadow angle of the desired direction with respect to the sun.
+    
     Returns
-    ________
-       sunaz : the declination of the desired direction wrt true north.
+    -------
+    sunaz : the declination of the desired direction with respect to true north
+    
+    Examples
+    --------
+    >>> sundata={'date':'1994:05:23:16:9','delta_u':3,'lat':35,'lon':33,'shadow_angle':68}
+    >>> pmag.dosundec(sundata)
+    154.24420046668928
     """
     iday = 0
     timedate = sundata["date"]
@@ -4147,7 +4340,7 @@ def dosundec(sundata):
         day = day - 1
         hrs = hrs + 24
     julian_day = julian(mon, day, year)
-    utd = old_div((hrs + old_div(min, 60.)), 24.)
+    utd = (hrs + (min / 60)) / 24
     greenwich_hour_angle, delta = gha(julian_day, utd)
     H = greenwich_hour_angle + float(sundata["lon"])
     if H > 360:
@@ -4177,6 +4370,25 @@ def dosundec(sundata):
 def gha(julian_day, f):
     """
     Returns greenwich hour angle.
+    
+    Parameters
+    ----------
+    julian_day : int, julian day
+    f : int 
+        fraction of the day in Universal Time, (hrs + (min/60))/24
+    
+    Returns
+    -------
+    H: int, hour
+    delta: int, angle
+    
+    Examples
+    --------
+    >>> julianday = pmag.julian(10,20,2000)
+    >>> pmag.gha(julianday, 33)
+    (183.440612472039, -20.255315389871825)
+    >>> pmag.gha(2451838, 33)
+    (183.440612472039, -20.255315389871825)
     """
     rad = np.pi/180.
     d = julian_day - 2451545.0 + f
@@ -4189,22 +4401,23 @@ def gha(julian_day, f):
 # obliquity of ecliptic
     epsilon = 23.439 - 0.0000004 * d
 # right ascension (in same quadrant as lambda)
-    t = (np.tan(old_div((epsilon * rad), 2)))**2
-    r = old_div(1, rad)
+    t = (np.tan((epsilon * rad) / 2))**2
+    r = 1 / rad
     rl = lamb * rad
     alpha = lamb - r * t * np.sin(2 * rl) + \
-        (old_div(r, 2)) * t * t * np.sin(4 * rl)
+        (r / 2) * t * t * np.sin(4 * rl)
 #       alpha=mod(alpha,360.0)
 # declination
     delta = np.sin(epsilon * rad) * np.sin(lamb * rad)
-    delta = old_div(np.arcsin(delta), rad)
+    delta = np.arcsin(delta) / rad
 # equation of time
     eqt = (L - alpha)
 #
     utm = f * 24 * 60
-    H = old_div(utm, 4) + eqt + 180
+    H = (utm / 4) + eqt + 180
     H = H % 360.0
     return H, delta
+
 
 
 def julian(mon, day, year):
@@ -4212,17 +4425,17 @@ def julian(mon, day, year):
     Returns julian day.
     
     Parameters
-    __________
-        mon : input month
-        day : input day
-        year : input year
+    ----------
+    mon : int, month
+    day : int, day
+    year : int, year
     
     Returns
-    _______
-        Julian day as a flt
+    -------
+    julian_day : Julian day as a flt
     
     Examples
-    ________
+    --------
     >>> pmag.julian(10,20,2000)
     2451838
     """
@@ -4250,7 +4463,16 @@ def julian(mon, day, year):
 
 def fillkeys(Recs):
     """
-    reconciles keys of dictionaries within Recs.
+    Reconciles keys of dictionaries within Recs.
+    
+    Parameters
+    ----------
+    Recs : list of dictionaries in MagIC format OR pandas dataframe
+    
+    Returns
+    -------
+    input Recs 
+    keylist : list of keys found in Recs
     """
     keylist, OutRecs = [], []
     for rec in Recs:
@@ -4267,15 +4489,15 @@ def fillkeys(Recs):
 
 def fisher_mean(data):
     """
-    Calculates the Fisher mean and associated parameter from a di_block
+    Calculates the Fisher mean and associated parameter from a di_block.
 
     Parameters
     ----------
-    di_block : a nested list of [dec,inc] or [dec,inc,intensity]
+    data : nested list of [dec,inc] or [dec,inc,intensity]
 
     Returns
     -------
-    fpars : dictionary containing the Fisher mean and statistics
+    fpars : dictionary containing the Fisher mean and statistics with keys
         dec : mean declination
         inc : mean inclination
         r : resultant vector length
@@ -4283,25 +4505,36 @@ def fisher_mean(data):
         k : Fisher k value
         csd : Fisher circular standard deviation
         alpha95 : Fisher circle of 95% confidence
+        
+    Examples
+    --------
+    >>> data = [[-45,150],[-40,150],[-38,145]]
+    >>> pmag.fisher_mean(data)
+    {'dec': 138.94545436727873,
+     'inc': 31.699974714611297,
+     'n': 3,
+     'r': 2.9946002939178036,
+     'k': 370.39053043910616,
+     'alpha95': 6.414731246264079,
+     'csd': 4.20876891770567}    
     """
-    R, Xbar, X, fpars = 0, [0, 0, 0], [], {}
-    N = len(data)
-    if N < 2:
-        return fpars
-    X = dir2cart(data)
-    for i in range(len(X)):
-        for c in range(3):
-            Xbar[c] += X[i][c]
-    for c in range(3):
-        R += Xbar[c]**2
-    R = np.sqrt(R)
-    for c in range(3):
-        Xbar[c] = Xbar[c]/R
+    N, fpars = len(data), {}
+    
+    if N < 2: 
+        return {'dec': data[0][0], 
+                'inc': data[0][1]}
+    
+    X = np.array(dir2cart(data))
+    Xbar = X.sum(axis=0)
+    R = np.linalg.norm(Xbar)
+    Xbar = Xbar/R
     dir = cart2dir(Xbar)
+
     fpars["dec"] = dir[0]
     fpars["inc"] = dir[1]
     fpars["n"] = N
     fpars["r"] = R
+    
     if N != R:
         k = (N - 1.) / (N - R)
         fpars["k"] = k
@@ -4323,7 +4556,33 @@ def fisher_mean(data):
 
 def gausspars(data):
     """
-    calculates gaussian statistics for data
+    Calculates gaussian statistics for data. 
+    
+    Parmeters
+    ---------
+    data : array of data 
+    
+    Returns 
+    -------
+    mean : array the length of the data array  
+    stdev : second array the length of the data array
+    
+    Examples
+    --------
+    >>> data=np.loadtxt('data_files/vector_mean/vector_mean_example.dat')
+    >>> pmag.gausspars(data)
+    (array([  154.72699999999995,    44.43599999999999, 23709.242399999992  ]),
+     array([  166.93766686153165 ,    19.578257988354988,
+        11563.604723319804   ]))
+          
+    >>> data = np.array([  [16.0,    43.0, 21620.33],
+           [30.5,    53.6, 12922.58],
+            [6.9,    33.2, 15780.08],
+          [352.5,    40.2, 33947.52], 
+          [354.2,    45.1, 19725.45]])
+    >>> pmag.gausspars(data)
+    (array([  152.02, 43.019999999999996, 20799.192]),
+     array([1.839818931308187e+02, 7.427112494098901e+00, 8.092252785230450e+03]))
     """
     N, mean, d = len(data), 0., 0.
     if N < 1:
@@ -4331,7 +4590,7 @@ def gausspars(data):
     if N == 1:
         return data[0], 0
     for j in range(N):
-        mean += old_div(data[j], float(N))
+        mean += data[j] / float(N)
     for j in range(N):
         d += (data[j] - mean)**2
     stdev = np.sqrt(d * (1./(float(N - 1))))
@@ -4339,7 +4598,7 @@ def gausspars(data):
 
 
 def calculate_k(R,N):
-    '''
+    """
     Calculates the the Fisher concentration parameter (k) based on the number of
     vectors and the resultant vector length. This calculation occurs within the
     fisher_mean() function. Use of this function can be helpful when R and N
@@ -4347,13 +4606,19 @@ def calculate_k(R,N):
 
     Parameters
     ----------
-    R : the resultant vector length
-    N : number of vectors
+    R : Resultant vector length
+    N : Number of vectors
 
     Returns
     -------
-    k : the Fisher concentration parameter
-    '''
+    k : Fisher concentration parameter
+    
+    Examples
+    --------
+    >>> n,r = 3, 4.335
+    >>> pmag.calculate_k(r,n)
+    -1.4981273408
+    """
     if N != R:
         k = (N - 1.) / (N - R)
     else:
@@ -4362,27 +4627,52 @@ def calculate_k(R,N):
 
 
 def calculate_r(alpha95,N):
-    '''
+    """
     Calculates the resultant vector length (R) based on the number of vectors
     and provided Fisher alpha95. Doing so can be useful for conducting
     statistical tests that require R when it is not provided.
 
     Parameters
     ----------
-    alpha95 : the Fisher alpha_95 value
+    alpha95 : Fisher alpha_95 value
     N : number of vectors
 
     Returns
     -------
-    R : the resultant vector length
-    '''
+    R : resultant vector length
+    
+    Examples 
+    --------
+    >>> alpha95, N = 6.41, 3
+    >>> pmag.calculate_r(alpha95,N)
+    2.994608233588127
+    """
     R = ((20**(1/(N-1))-1)*N)/((20**(1/(N-1)))-np.cos(np.deg2rad(alpha95)))
     return R
 
 
 def weighted_mean(data):
     """
-    calculates weighted mean of data
+    Calculates the weighted mean of data.
+    
+    Parameters
+    ----------
+    data : array of data 
+    
+    Returns
+    -------
+    mean : mean of the data as a float
+    stdev : standard deviation of the data as a float
+    
+    Examples
+    --------
+    >>> data = np.array([  [16.0,    43.0, 33],
+           [30.5,    53.6, 58],
+            [6.9,    33.2, 8],
+          [352.5,    40.2, 52], 
+          [354.2,    45.1, 45]])
+    >>> pmag.weighted_mean(data)
+    (152.00743840074387, 81.7174866362813)
     """
     W, N, mean, d = 0, len(data), 0, 0
     if N < 1:
@@ -4392,11 +4682,12 @@ def weighted_mean(data):
     for x in data:
         W += x[1]  # sum of the weights
     for x in data:
-        mean += old_div((float(x[1]) * float(x[0])), float(W))
+        mean += (float(x[1]) * float(x[0])) / float(W)
     for x in data:
-        d += (old_div(float(x[1]), float(W))) * (float(x[0]) - mean)**2
-    stdev = np.sqrt(d * (old_div(1., (float(N - 1)))))
+        d += (float(x[1]) / float(W)) * (float(x[0]) - mean)**2
+    stdev = np.sqrt(d * (1 / float(N - 1)))
     return mean, stdev
+
 
 
 def lnpbykey(data, key0, key1):  # calculate a fisher mean of key1 data for a group of key0
@@ -4437,14 +4728,43 @@ def lnpbykey(data, key0, key1):  # calculate a fisher mean of key1 data for a gr
 
 def fisher_by_pol(data):
     """
-    input:    as in dolnp (list of dictionaries with 'dec' and 'inc')
-    description: do fisher mean after splitting data into two polarity domains.
-    output: three dictionaries:
+    Do fisher mean after splitting data into two polarity domains.
+    
+    Parameters
+    ----------
+    data: list of dictionaries with 'dec' and 'inc'
+    
+    Returns 
+    -------
+    three dictionaries:
         'A'= polarity 'A'
         'B = polarity 'B'
         'ALL'= switching polarity of 'B' directions, and calculate fisher mean of all data
-    code modified from eqarea_ell.py b rshaar 1/23/2014
+        
+    Examples
+    --------
+    >>> data = [{'dec':-45,'inc':150}, {'dec':-44,'inc':150},{'dec':-45.3,'inc':149}]
+    >>> pmag.fisher_by_pol(data)
+    {'B': {'dec': 135.23515314555496,
+      'inc': 30.334504880687444,
+      'n': 3,
+      'r': 2.9997932987279383,
+      'k': 9675.799186195498,
+      'alpha95': 1.2533447889568254,
+      'csd': 0.8234582703442529,
+      'sites': '',
+      'locs': ''},
+     'All': {'dec': 315.23515314555493,
+      'inc': -30.334504880687444,
+      'n': 3,
+      'r': 2.999793298727938,
+      'k': 9675.79918617471,
+      'alpha95': 1.2533447889582796,
+      'csd': 0.8234582703451375,
+      'sites': '',
+      'locs': ''}}
     """
+    # code modified from eqarea_ell.py b rshaar 1/23/2014
     FisherByPoles = {}
     DIblock, nameblock, locblock = [], [], []
     for rec in data:
@@ -4516,7 +4836,7 @@ def dolnp3_0(Data):
     DEPRECATED!!  USE dolnp()
     Description: takes a list of dicts with the controlled vocabulary of 3_0 and calls dolnp on them after reformating for compatibility.
     Parameters
-    __________
+    ---------------_
     Data : nested list of dictionaries with keys
         dir_dec
         dir_inc
@@ -4573,10 +4893,10 @@ def dolnp3_0(Data):
 
 def dolnp(data, direction_type_key):
     """
-    Returns fisher mean, a95 for data using the method of McFadden and McElhinny 1988 for lines and planes
+    Returns fisher mean, a95 for data using the method of McFadden and McElhinny 1988 for lines and planes.
 
     Parameters
-    __________
+    ----------
     Data : nested list of dictionaries with keys
         Data model 3.0:
             dir_dec
@@ -4588,21 +4908,23 @@ def dolnp(data, direction_type_key):
             inc
             tilt_correction
             magic_method_codes
-         direction_type_key :  ['specimen_direction_type']
+    direction_type_key :  ['specimen_direction_type']
+    
     Returns
     -------
-        ReturnData : dictionary with keys
-            dec : fisher mean dec of data in Data
-            inc : fisher mean inc of data in Data
-            n_lines : number of directed lines [method_code = DE-BFL or DE-FM]
-            n_planes : number of best fit planes [method_code = DE-BFP]
-            alpha95  : fisher confidence circle from Data
-            R : fisher R value of Data
-            K : fisher k value of Data
+    ReturnData : dictionary with keys
+        dec : fisher mean dec of data in Data
+        inc : fisher mean inc of data in Data
+        n_lines : number of directed lines [method_code = DE-BFL or DE-FM]
+        n_planes : number of best fit planes [method_code = DE-BFP]
+        alpha95  : fisher confidence circle from Data
+        R : fisher R value of Data
+        K : fisher k value of Data
+        
     Effects
-        prints to screen in case of no data
+    -------
+    prints to screen in case of no data
     """
-
     if 'dir_dec' in data[0].keys():
         tilt_key = 'dir_tilt_correction'  # this is data model 3.0
     else:
@@ -4679,7 +5001,7 @@ def dolnp(data, direction_type_key):
 
 def vclose(L, V):
     """
-    gets the closest vector
+    Calculates the closest vector.
     """
     lam, X = 0, []
     for k in range(3):
@@ -4692,13 +5014,19 @@ def vclose(L, V):
 
 def calculate_best_fit_vectors(L, E, V, n_planes):
     """
-    Calculates the best fit vectors for a set of plane interpretations used in fisher mean calculations
-    @param: L - a list of the "EL, EM, EN" array of MM88 or the cartisian form of dec and inc of the plane interpretation
-    @param: E - the sum of the cartisian coordinates of all the line fits to be used in the mean
-    @param: V - initial direction to start iterating from to get plane best fits
-    @returns: nested list of n_plane by 3 dimension where the 3 are the cartisian dimension of the best fit vector
+    Calculates the best fit vectors for a set of plane interpretations used in fisher mean calculations.
+    
+    Parameters
+    ----------
+    L : a list of the "EL, EM, EN" array of MM88 or the cartisian form of dec and inc of the plane interpretation
+    E : the sum of the cartisian coordinates of all the line fits to be used in the mean
+    V : initial direction to start iterating from to get plane best fits
+    n_planes : number of planes
+    
+    Returns
+    -------
+    XV : nested list of n_plane by 3 dimension where the 3 are the cartisian dimension of the best fit vector
     """
-
     U, XV = E[:], []  # make a copy of E to prevent mutation
     for pole in L:
         XV.append(vclose(pole, V))  # get some points on the great circle
@@ -4731,17 +5059,20 @@ def calculate_best_fit_vectors(L, E, V, n_planes):
 
 def process_data_for_mean(data, direction_type_key):
     """
-    takes list of dicts with dec and inc as well as direction_type if possible or method_codes and sorts the data into lines and planes and process it for fisher means
-
-    @param: data - list of dicts with dec inc and some manner of PCA type info
-    @param: direction_type_key - key that indicates the direction type variable in the dictionaries of data
-    @return: tuple with values - (
-                                list of lists with [dec, inc, 1.] for all lines
-                                number of line
-                                list of lists with [EL,EM,EN] of all planes
-                                number of planes
-                                list of sum of the cartezian components of all lines
-                                )
+    Takes a list of dicts with dec and inc as well as direction_type if possible or method_codes and sorts the data into lines and planes and process it for fisher means
+    
+    Parameters
+    ----------
+    data : list of dicts with dec inc and some manner of PCA type info
+    direction_type_key : key that indicates the direction type variable in the dictionaries of data
+    
+    Returns
+    -------
+    tuple with values: list of lists with [dec, inc, 1.] for all lines
+                       number of line
+                       list of lists with [EL,EM,EN] of all planes
+                       number of planes
+                       list of sum of the cartezian components of all lines
     """
     dec_key, inc_key, meth_key = 'dec', 'inc', 'magic_method_codes'  # data model 2.5
     if 'dir_dec' in data[0].keys():  # this is data model 3.0
@@ -4801,7 +5132,9 @@ def process_data_for_mean(data, direction_type_key):
 
 def scoreit(pars, PmagSpecRec, accept, text, verbose):
     """
-    gets a grade for a given set of data, spits out stuff
+    Depreciated 9/14/2022
+    
+    Gets a grade for a given set of data, spits out stuff.
     """
     s = PmagSpecRec["er_specimen_name"]
     PmagSpecRec["measurement_step_min"] = '%8.3e' % (
@@ -4869,36 +5202,33 @@ def scoreit(pars, PmagSpecRec, accept, text, verbose):
 
 def b_vdm(B, lat):
     """
-    Converts a magnetic field value (input in units of tesla) to a virtual
-    dipole moment (VDM) or a virtual axial dipole moment (VADM); output
-    in units of Am^2)
-
+    Converts a magnetic field value of list of values to  virtual dipole moment (VDM)
+    or a virtual axial dipole moment (VADM).
+    
     Parameters
-    ----------
-    B: local magnetic field strength in tesla
+    B: local magnetic field strength in tesla, as a value or list of values
     lat: latitude of site in degrees
 
     Returns
-    ----------
-    V(A)DM in units of Am^2
+    VDM or V(A)DM in units of Am^2
 
     Examples
     --------
     >>> pmag.b_vdm(33e-6,22)*1e-21
-
     71.58815974511788
     """
     # changed radius of the earth from 3.367e6 3/12/2010
     fact = ((6.371e6)**3) * 1e7
     colat = np.radians(90. - lat)
-    return fact * B / (np.sqrt(1 + 3 * (np.cos(colat)**2)))
+    B = np.array(B).astype('float')
+    Vs= fact * B / (np.sqrt(1 + 3 * (np.cos(colat)**2)))
+    return Vs
 
 
 def vdm_b(vdm, lat):
     """
     Converts a virtual dipole moment (VDM) or a virtual axial dipole moment
-    (VADM; input in units of Am^2) to a local magnetic field value (output in
-    units of tesla)
+    (VADM) to a local magnetic field value 
 
     Parameters
     ----------
@@ -4908,6 +5238,11 @@ def vdm_b(vdm, lat):
     Returns
     -------
     B: local magnetic field strength in tesla
+    
+    Examples 
+    --------
+    >>> pmag.vdm_b(65, 20)
+    2.9215108300460446e-26
     """
     rad = np.pi/180.
     # changed radius of the earth from 3.367e6 3/12/2010
@@ -4918,10 +5253,19 @@ def vdm_b(vdm, lat):
 def binglookup(w1i,w2i):
     """
     Bingham statistics lookup table.
-    Parameters:
-        w1i,w2i : initial values for w1 and w2
+    
+    Parameters
+    ----------
+    w1i,w2i : initial values for w1 and w2
+    
     Returns
-        k1,k2 : k1 and k2 for Bingham distribution
+    -------
+    k1,k2 : k1 and k2 for Bingham distribution
+    
+    Examples 
+    --------
+    >>> pmag.binglookup(0.12,0.15)
+    (-4.868, -3.7289999999999996)
     """
     ## find PYTHONPATH
     #pdirs=os.environ['PYTHONPATH'].split(os.pathsep)
@@ -5781,7 +6125,7 @@ def cdfout(data, file):
 def dobingham(di_block):
     """
     Calculates the Bingham mean and associated statistical parameters from
-    directions that are input as a di_block
+    directions that are input as a di_block.
 
     Parameters
     ----------
@@ -5844,16 +6188,24 @@ def dobingham(di_block):
 
 def doflip(dec, inc):
     """
-    flips upper hemisphere data to lower hemisphere
+    Flips upper hemisphere data to lower hemisphere.
+    
     Parameters
-    _________________
+    ----------
     dec : float
         declination
     inc : float
         inclination
-    Returns: 
-   _____________
-    flipped declination, inclination    
+    
+    Returns 
+    -------
+    tuple
+        containing the flipped declination and inclination 
+        
+    Examples
+    -------
+    >>> pmag.doflip(30,-45)
+    (210.0, 45)
     """
     if inc < 0:
         inc = -inc
@@ -5863,7 +6215,26 @@ def doflip(dec, inc):
 
 def doreverse(dec, inc):
     """
-    calculates the antipode of a direction
+    Calculates the antipode of a direction.
+    
+    Parameters
+    ----------
+    dec: float
+        declination
+    inc: float 
+        inclination
+        
+    Returns 
+    -------
+    dec: float
+        antipode of the declination
+    inc: float 
+        antipode of the inclination
+    
+    Examples
+    --------
+    >>> pmag.doreverse(30,45)
+    (210.0, -45)
     """
     inc = -inc
     dec = (dec + 180.) % 360.
@@ -5872,7 +6243,22 @@ def doreverse(dec, inc):
 
 def doreverse_list(decs, incs):
     """
-    calculates the antipode of list of directions
+    Calculates the antipode of list of directions.
+    
+    Parameters
+    ----------
+    decs : list of declinations
+    incs : list of inclinations
+    
+    Returns
+    -------
+    decs_flipped : antipode list of declinations
+    incs_flipped : antipode list of inclinations
+    
+    Examples 
+    --------
+    >>> pmag.doreverse_list([30,32,70,54],[60,62,0,10])
+    ([210.0, 212.0, 250.0, 234.0], [-60, -62, 0, -10])
     """
     incs_flipped = [-i for i in incs]
     decs_flipped = [(dec + 180.) % 360. for dec in decs]
@@ -5889,7 +6275,7 @@ def doincfish(inc):
 
     Returns
     -------
-    dictionary of
+    dict
         'n' : number of inclination values supplied
         'ginc' : gaussian mean of inclinations
         'inc' : estimated Fisher mean
@@ -5897,8 +6283,18 @@ def doincfish(inc):
         'k' : estimated Fisher kappa
         'alpha95' : estimated fisher alpha_95
         'csd' : estimated circular standard deviation
+
+    Examples
+    --------
+    >>> pmag.doincfish([60,62,0,10])
+    {'n': 4,
+     'ginc': 33.0,
+     'inc': 39.85999999999957,
+     'r': 2.9999543668915347,
+     'k': 2.999863106921461,
+     'alpha95': 57.453002724988956,
+     'csd': 46.76643881682904}
     """
-    rad, SCOi, SSOi = np.pi/180., 0., 0.  # some definitions
     abinc = []
     for i in inc:
         abinc.append(abs(i))
@@ -5915,35 +6311,30 @@ def doincfish(inc):
         fpars['r'] = 0
         print('WARNING: mean inc < 30, returning gaussian mean')
         return fpars
-    for i in inc:  # sum over all incs (but take only positive inc)
-        coinc = (90. - abs(i)) * rad
-        SCOi += np.cos(coinc)
-        SSOi += np.sin(coinc)
-    Oo = (90.0 - MI) * rad  # first guess at mean
-    SCFlag = -1  # sign change flag
-    epsilon = float(N) * np.cos(Oo)  # RHS of zero equations
-    epsilon += (np.sin(Oo)**2 - np.cos(Oo)**2) * SCOi
-    epsilon -= 2. * np.sin(Oo) * np.cos(Oo) * SSOi
-    while SCFlag < 0:  # loop until cross zero
-        if MI > 0:
-            Oo -= (.01 * rad)  # get steeper
-        if MI < 0:
-            Oo += (.01 * rad)  # get shallower
-        prev = epsilon
-        epsilon = float(N) * np.cos(Oo)  # RHS of zero equations
-        epsilon += (np.sin(Oo)**2. - np.cos(Oo)**2.) * SCOi
-        epsilon -= 2. * np.sin(Oo) * np.cos(Oo) * SSOi
-        if abs(epsilon) > abs(prev):
-            MI = -1 * MI  # reverse direction
-        if epsilon * prev < 0:
-            SCFlag = 1  # changed sign
-    S, C = 0., 0.  # initialize for summation
-    for i in inc:
-        coinc = (90. - abs(i)) * rad
-        S += np.sin(Oo - coinc)
-        C += np.cos(Oo - coinc)
+    inc = np.array(inc)
+    coinc = np.deg2rad(90. - np.abs(inc)) # sum over all incs (but take only positive inc)
+    SCOi = np.cos(coinc).sum()
+    SSOi = np.sin(coinc).sum()
+    min_misfit,min_curvature = np.inf,0.
+    Oo = np.deg2rad(np.arange(0,90,0.01))
+    t1 = N*np.cos(Oo)
+    t2 = (np.sin(Oo)**2. - np.cos(Oo)**2.) * SCOi
+    t3 = 2. * np.sin(Oo) * np.cos(Oo) * SSOi
+    misfit = t1+t2-t3
+    idx_zeros = np.argwhere(np.diff(np.sign(misfit)))
+    if len(idx_zeros)==0:
+        idx_zeros = np.argmin(abs(misfit))
+        print("No zeros found to fitness function of McFadden and Reed 1982, returning absolute minimum which is at %.3f instead.\nThis likely indicates that your inclinations are too steep for this method you may wish to consider an alternate technique."%misfit[idx_zeros])
+    ML_zeros = np.array(Oo[[idx_zeros]])
+    ML_matrix = (np.ones([len(coinc),1]) @ ML_zeros.reshape(1,ML_zeros.shape[0])).T
+#    print(coinc.shape,ML_zeros.shape,ML_matrix.shape)
+    U = 0.5*N*((1/(np.cos(ML_zeros)**2))-(np.cos(ML_matrix-coinc).sum(axis=1)/(N-np.cos(ML_matrix-coinc).sum(axis=1))))
+#    print("Found Zeros: ", ML_zeros, "Second Derivative: ", U)
+    Oo = ML_zeros[np.argmin(U)]
+    C = np.cos(Oo-coinc).sum()
+    S = np.sin(Oo-coinc).sum()
     k = old_div((N - 1.), (2. * (N - C)))
-    Imle = 90. - (old_div(Oo, rad))
+    Imle = 90. - np.rad2deg(Oo)
     fpars["inc"] = Imle
     fpars["r"], R = 2. * C - N, 2 * C - N
     fpars["k"] = k
@@ -5951,7 +6342,7 @@ def doincfish(inc):
     a95 = 1. - (0.5) * (old_div(S, C))**2 - (old_div(f, (2. * C * k)))
 #    b=20.**(1./(N-1.)) -1.
 #    a=1.-b*(N-R)/R
-    a95=np.arccos(a95)*180./np.pi
+    a95=np.rad2deg(np.arccos(a95))
     csd = old_div(81., np.sqrt(k))
     fpars["alpha95"] = a95
     fpars["csd"] = csd
@@ -5960,29 +6351,31 @@ def doincfish(inc):
 
 def dokent(data, NN, distribution_95=False):
     """
-    gets Kent  parameters for data
+    Gets Kent parameters for data.
+    
     Parameters
-    ___________________
+    ----------
     data :  nested pairs of [Dec,Inc]
     NN  : normalization
-        NN is the number of data for Kent ellipse
+        Number of data for Kent ellipse
         NN is 1 for Kent ellipses of bootstrapped mean directions
     distribution_95 : the default behavior (distribution_95=False) is for
         the function to return the confidence region for the mean direction.
         if distribution_95=True what instead will be returned is the parameters
         associated with the region containing 95% of the directions.
 
-    Return
+    Returns
+    -------
     kpars dictionary keys
         dec : mean declination
         inc : mean inclination
         n : number of datapoints
-        Eta : major ellipse
-        Edec : declination of major ellipse axis
-        Einc : inclination of major ellipse axis
-        Zeta : minor ellipse
-        Zdec : declination of minor ellipse axis
-        Zinc : inclination of minor ellipse axis
+        Zeta : major ellipse
+        Zdec : declination of major ellipse axis
+        Zinc : inclination of major ellipse axis
+        Eta : minor ellipse
+        Edec : declination of minor ellipse axis
+        Einc : inclination of minor ellipse axis
     """
     X, kpars = [], {}
     N = len(data)
@@ -6084,8 +6477,13 @@ def dokent(data, NN, distribution_95=False):
     kpars["dec"] = fpars["dec"]
     kpars["inc"] = fpars["inc"]
     kpars["n"] = NN
-    ZDir = cart2dir([gam[0][1], gam[1][1], gam[2][1]])
-    EDir = cart2dir([gam[0][0], gam[1][0], gam[2][0]])
+    if eta > zeta:
+        eta, zeta = zeta, eta
+        EDir = cart2dir([gam[0][1], gam[1][1], gam[2][1]])
+        ZDir = cart2dir([gam[0][0], gam[1][0], gam[2][0]])
+    else:
+        ZDir = cart2dir([gam[0][1], gam[1][1], gam[2][1]])
+        EDir = cart2dir([gam[0][0], gam[1][0], gam[2][0]])
     kpars["Zdec"] = ZDir[0]
     kpars["Zinc"] = ZDir[1]
     kpars["Edec"] = EDir[0]
@@ -6124,7 +6522,6 @@ def doprinc(data):
         tau2 : intermediate eigenvalue
         tau3 : minor eigenvalue
         N  : number of points
-        Edir : elongation direction [dec, inc, length]
     """
     ppars = {}
     rad = np.pi/180.
@@ -6142,7 +6539,7 @@ def doprinc(data):
 #
     t, V = tauV(T)
     Pdir = cart2dir(V[0])
-    ppars['Edir'] = cart2dir(V[1])  # elongation direction
+    #ppars['Edir'] = cart2dir(V[1])  # elongation direction - this is V2dec!
     dec, inc = doflip(Pdir[0], Pdir[1])
     ppars['dec'] = dec
     ppars['inc'] = inc
@@ -6174,7 +6571,7 @@ def pt_rot(EP, Lats, Lons):
     Lons : list of longitudes of points to be rotated
 
     Returns
-    _________
+    -------
     RLats : list of rotated latitudes
     RLons : list of rotated longitudes
     """
@@ -6215,8 +6612,10 @@ def pt_rot(EP, Lats, Lons):
 
 def dread(infile, cols):
     """
-     reads in specimen, tr, dec, inc int into data[].  position of
-     tr, dec, inc, int determined by cols[]
+    Depreciated 9/14/2022 
+    
+    Reads in specimen, tr, dec, inc int into data[].  position of
+    tr, dec, inc, int determined by cols[]
     """
     data = []
     f = open(infile, "r")
@@ -6236,13 +6635,18 @@ def fshdev(k):
 
     Parameters
     ----------
-    k : kappa (precision parameter) of the distribution
-        k can be a single number or an array of values
+    k : single number or an array of values
+        kappa (precision parameter) of the distribution
 
     Returns
-    ----------
+    -------
     dec, inc : declination and inclination of random Fisher distribution draw
                if k is an array, dec, inc are returned as arrays, otherwise, single values
+    
+    Examples
+    --------
+    >>> pmag.fshdev(8)
+    (334.3434290469283, 61.06963783415771)
     """
     k = np.array(k)
     if len(k.shape) != 0:
@@ -6262,23 +6666,27 @@ def fshdev(k):
         return dec, inc
 
 def kentdev(kappa, beta, n=1000):
-
-    '''
+    """
     Generate a random draw from a Kent distribution with mean declination
     of 0 and inclination of 90, elongated along -90 to 90 longitude 
-    with a specified kappa and beta
+    with a specified kappa and beta.
 
     Parameters
     ----------
     kappa : kappa (precision parameter) of the distribution
-    beta: beta ellipticity of the contours of equal probability of the distribution
-    n: number of samples to redraw
+    beta : beta ellipticity of the contours of equal probability of the distribution
+    n : number of samples to redraw
 
     Returns
-    ----------
+    -------
     dec, inc : declination and inclination of random Kent distribution draw
     
-    '''
+    Examples
+    --------
+    >>> pmag.kentdev(30,0.2,3)
+    ([249.6338265814872, 243.60784772662754, 273.37935292238103],
+     [74.05222965175194, 80.43784483273899, 82.34979130960458])
+    """
     
     # initialize dec, inc lists to be reported
     decs = []
@@ -6358,17 +6766,16 @@ def kentdev(kappa, beta, n=1000):
 
 def lowes(data):
     """
-    gets Lowe's power spectrum  from gauss coefficients
+    Gets Lowe's power spectrum from gauss coefficients.
 
     Parameters
-    _________
+    ----------
     data : nested list of [[l,m,g,h],...] as from pmag.unpack()
 
     Returns
-    _______
-    Ls : list of degrees (l)
-    Rs : power at  degree l
-
+    -------
+    Ls : list of degrees l
+    Rs : power at degree l
     """
     lmax = data[-1][0]
     Ls = list(range(1, lmax+1))
@@ -6386,7 +6793,25 @@ def lowes(data):
 
 def magnetic_lat(inc):
     """
-    returns magnetic latitude from inclination
+    Calculates the magnetic latitude from inclination.
+    
+    Parameters
+    ----------
+    inc : single float or array 
+        inclination value(s)
+    
+    Returns
+    -------
+    paleo_lat : single float or array
+        magnetic latitude from the given inclination(s) 
+    
+    Examples 
+    --------
+    >>> pmag.magnetic_lat(35)
+    19.29534273533122
+    
+    >>> pmag.magnetic_lat([35,60,20])
+    array([19.29534273533122 , 40.8933946491309  , 10.314104815618196])
     """
     paleo_lat = np.degrees(np.arctan(0.5 * np.tan(np.radians(inc))))
     return paleo_lat
@@ -6433,7 +6858,9 @@ def check_F(AniSpec):
 
 def Dir_anis_corr(InDir, AniSpec):
     """
-    takes the 6 element 's' vector and the Dec,Inc 'InDir' data,
+    Depreciated 9/14/2022
+    
+    Takes the 6 element 's' vector and the Dec,Inc 'InDir' data,
     performs simple anisotropy correction. returns corrected Dec, Inc
     """
     Dir = np.zeros((3), 'f')
@@ -6451,7 +6878,9 @@ def Dir_anis_corr(InDir, AniSpec):
 
 def doaniscorr(PmagSpecRec, AniSpec):
     """
-    takes the 6 element 's' vector and the Dec,Inc, Int 'Dir' data,
+    Depreciated 9/14/2022
+    
+    Takes the 6 element 's' vector and the Dec,Inc, Int 'Dir' data,
     performs simple anisotropy correction. returns corrected Dec, Inc, Int
     """
     AniSpecRec = {}
@@ -6540,7 +6969,7 @@ def vgp_di(plat, plong, slat, slong):
     slong : longitude of site
 
     Returns
-    ----------
+    -------
     dec,inc : tuple of declination and inclination
     """
     plong = plong % 360
@@ -6575,7 +7004,7 @@ def vgp_di(plat, plong, slat, slong):
 
 def watsonsV(Dir1, Dir2):
     """
-    calculates Watson's V statistic for two sets of directions
+    Calculates Watson's V statistic for two sets of directions
     """
     counter, NumSims = 0, 500
 #
@@ -6620,7 +7049,7 @@ def watsonsV(Dir1, Dir2):
 
 def dimap(D, I):
     """
-    Function to map directions  to x,y pairs in equal area projection
+    Function to map directions  to x,y pairs in equal area projection.
 
     Parameters
     ----------
@@ -6663,11 +7092,22 @@ def dimap(D, I):
 
 def dimap_V(D, I):
     """
-    FUNCTION TO MAP DECLINATION, INCLINATIONS INTO EQUAL AREA PROJECTION, X,Y
+    Maps declinations and inclinations into equal area projections.
 
-    Usage:     dimap_V(D, I)
-        D and I are both numpy arrays
-
+    Parameters 
+    ----------
+    D, I : numpy arrays
+    
+    Returns
+    -------
+    XY : array of equal area projections
+    
+    Examples
+    --------
+    >>> pmag.dimap_V([35,60,20],[70,80,-10])
+    array([[0.140856382055789, 0.20116376126988 ],
+       [0.106743548942519, 0.061628416716219],
+       [0.310909633795401, 0.85421719834377 ]])
     """
 # GET CARTESIAN COMPONENTS OF INPUT DIRECTION
     DI = np.array([D, I]).transpose()
@@ -6683,7 +7123,15 @@ def dimap_V(D, I):
 
 def getmeths(method_type):
     """
-    returns MagIC  method codes available for a given type
+    Returns MagIC method codes available for a given type.
+    
+    Parameters
+    ----------
+    method_type : str
+    
+    Returns
+    -------
+    meths : specified methods codes for the given type 
     """
     meths = []
     if method_type == 'GM':
@@ -6725,7 +7173,7 @@ def getmeths(method_type):
 
 def first_up(ofile, Rec, file_type):
     """
-    writes the header for a MagIC template file
+    Writes the header for a MagIC template file.
     """
     keylist = []
     pmag_out = open(ofile, 'a')
@@ -6763,7 +7211,7 @@ def average_int(data, keybase, outkey):
 
 def get_age(Rec, sitekey, keybase, Ages, DefaultAge):
     """
-    finds the age record for a given site
+    Finds the age record for a given site.
     """
     site = Rec[sitekey]
     gotone = 0
@@ -6789,7 +7237,7 @@ def get_age(Rec, sitekey, keybase, Ages, DefaultAge):
 
 def adjust_ages(AgesIn):
     """
-    Function to adjust ages to a common age_unit
+    Function to adjust ages to a common age_unit.
     """
 # get a list of age_units first
     age_units, AgesOut, factors, factor, maxunit, age_unit = [], [], [], 1, 1, "Ma"
@@ -6836,18 +7284,23 @@ def adjust_ages(AgesIn):
 
 def gaussdev(mean, sigma, N=1):
     """
-    returns a number randomly drawn from a gaussian distribution with the given mean, sigma
-    Parmeters:
-    _____________________________
+    Returns a number randomly drawn from a gaussian distribution with the given mean, sigma
+    
+    Parmeters
+    ---------
     mean : mean of the gaussian distribution from which to draw deviates
     sigma : standard deviation of same
     N : number of deviates desired
 
     Returns
     -------
-
-    N deviates from the normal distribution from
-.
+    N deviates from the normal distribution
+    
+    Examples
+    --------
+    >>> pmag.gaussdev(5.5,1.2,6)
+    array([5.090856280215007, 3.305193918953536, 7.313490558588299,
+           5.412029315803913, 6.819820301799303, 7.632257251681613])
     """
     return random.normal(mean, sigma, N)  # return gaussian deviate
 #
@@ -6857,13 +7310,23 @@ def get_unf(N=100):
     """
     Generates N uniformly distributed directions
     using the way described in Fisher et al. (1987).
+    
     Parameters
-    __________
+    ----------
     N : number of directions, default is 100
 
     Returns
-    ______
-    array of nested dec,inc pairs
+    -------
+    array of nested dec, inc pairs
+    
+    Examples
+    --------
+    >>> pmag.get_unf(5)
+    array([[ 62.916547703466684, -30.751721919151798],
+       [145.94851610484855 ,  76.45636268514875 ],
+       [312.61910867788174 , -67.24338629811932 ],
+       [ 61.71574344812653 ,  -4.005335509042522],
+       [ 15.867001505749716,  -1.404412703673322]])
     """
 #
 # get uniform directions  [dec,inc]
@@ -6903,7 +7366,22 @@ def get_unf(N=100):
 
 def s2a(s):
     """
-     convert 6 element "s" list to 3,3 a matrix (see Tauxe 1998)
+    Convert 6 element "s" list to 3x3 a matrix (see Tauxe 1998). 
+    
+    Parameters
+    ----------
+    s : six element list of floats
+    
+    Returns 
+    -------
+    a : 3x3 matrix as an array
+    
+    Examples 
+    --------
+    >>> pmag.s2a([1,2,3,4,5,6])
+    array([[1., 4., 6.],
+       [4., 2., 5.],
+       [6., 5., 3.]], dtype=float32)
     """
     a = np.zeros((3, 3,), 'f')  # make the a matrix
     for i in range(3):
@@ -6917,7 +7395,22 @@ def s2a(s):
 
 def a2s(a):
     """
-     convert 3,3 a matrix to 6 element "s" list  (see Tauxe 1998)
+    Convert 3x3 a matrix to 6 element "s" list  (see Tauxe 1998).
+    
+    Parameters
+    ----------
+    a : 3x3 matrix as an array
+    
+    Returns
+    -------
+    s : list of six elements based on a
+    
+    Examples
+    --------
+    >>> pmag.a2s([[1, 4, 6],
+                  [4, 2, 5],
+                  [6, 5, 3]])
+    array([1., 2., 3., 4., 5., 6.], dtype=float32)
     """
     s = np.zeros((6,), 'f')  # make the a matrix
     for i in range(3):
@@ -6930,18 +7423,28 @@ def a2s(a):
 
 def doseigs(s):
     """
-    convert s format for eigenvalues and eigenvectors
+    Convert s format for eigenvalues and eigenvectors.
 
     Parameters
-    __________
-    s=[x11,x22,x33,x12,x23,x13] : the six tensor elements
+    ----------
+    s : the six tensor elements as a list 
+        (s=[x11,x22,x33,x12,x23,x13])
 
-    Return
-    __________
-        tau : [t1,t2,t3]
-           tau is an list of eigenvalues in decreasing order:
-        V : [[V1_dec,V1_inc],[V2_dec,V2_inc],[V3_dec,V3_inc]]
-            is an list of the eigenvector directions
+    Returns
+    -------
+    A three element array and a nested list of dec, inc pairs
+    tau : three element array ([t1,t2,t3])
+        tau is an list of eigenvalues in decreasing order:
+    V : second array ([[V1_dec,V1_inc],[V2_dec,V2_inc],[V3_dec,V3_inc]])
+        is an list of the eigenvector directions
+        
+    Examples
+    --------
+    >>> pmag.doseigs([1,2,3,4,5,6])
+    ([2.021399, -0.33896524, -0.6824337],
+     [[44.59696385583322, 40.45122920806129],
+      [295.4500678147439, 21.04129013670037],
+      [185.0807541485627, 42.138918019674385]])
     """
 #
     A = s2a(s)  # convert s to a (see Tauxe 1998)
@@ -6960,17 +7463,28 @@ def doseigs(s):
 
 def doeigs_s(tau, Vdirs):
     """
-     get elements of s from eigenvaulues - note that this is very unstable
-     Input:
-         tau,V:
-           tau is an list of eigenvalues in decreasing order:
-              [t1,t2,t3]
-           V is an list of the eigenvector directions
-              [[V1_dec,V1_inc],[V2_dec,V2_inc],[V3_dec,V3_inc]]
-    Output:
-        The six tensor elements as a list:
-          s=[x11,x22,x33,x12,x23,x13]
+    Gets elements of s from eigenvaulues - note that this is very unstable.
+     
+    Parameters
+    ----------
+    tau : 3 element array
+        list of eigenvalues in decreasing order: [t1,t2,t3]
+    V : list of the eigenvector directions
+        [[V1_dec,V1_inc],[V2_dec,V2_inc],[V3_dec,V3_inc]]
 
+    Returns
+    -------
+    The six tensor elements as a list:
+        s = [x11,x22,x33,x12,x23,x13]
+    
+    Examples
+    --------
+    >>> pmag.doeigs_s([2.2, -0.33, -0.68],
+         [[44.59, 40.45],
+          [295.45, 21.04],
+          [185.08, 42.13]])
+    array([0.22194667, 0.3905577 , 0.57749563, 0.7154779 , 0.8923144 ,
+       1.0629525 ], dtype=float32)
     """
     t = np.zeros((3, 3,), 'f')  # initialize the tau diagonal matrix
     V = []
@@ -6989,15 +7503,21 @@ def doeigs_s(tau, Vdirs):
 
 def fcalc(col, row):
     """
-  looks up an F-test stastic from F tables F(col,row), where row is number of degrees of freedom - this is 95% confidence (p=0.05).
+    Looks up an F-test stastic from F tables F(col,row), where row is number of degrees of freedom - this is 95% confidence (p=0.05).
 
     Parameters
-    _________
-        col : degrees of freedom column
-        row : degrees of freedom row
+    ----------
+    col : degrees of freedom column
+    row : degrees of freedom row
 
     Returns
-        F : value for 95% confidence from the F-table
+    -------
+    F : value for 95% confidence from the F-table
+    
+    Examples
+    --------
+    >>> pmag.fcalc(3,4.8)
+    6.5915
     """
 #
     if row > 200:
@@ -7409,7 +7929,27 @@ def fcalc(col, row):
 
 def tcalc(nf, p):
     """
-     t-table for nf degrees of freedom (95% confidence)
+    T-table for nf degrees of freedom (95% confidence).
+    
+    Parameters
+    ----------
+    nf : degrees of freedom
+    p : either 0.05 or 0.01
+    
+    Returns
+    -------
+    t value or 0 if given an invalid p value
+    
+    Examples
+    --------
+    >>> pmag.tcalc(8,0.05)
+    2.3646
+    
+    >>> pmag.tcalc(8,0.07)
+    0
+    
+    >>> pmag.tcalc(8,0.01)
+    3.4995
     """
 #
     if p == .05:
@@ -7821,7 +8361,33 @@ def tcalc(nf, p):
 
 def sbar(Ss):
     """
-    calculate average s,sigma from list of "s"s.
+    Calculate average s,sigma from a list of S's.
+    
+    Parameters
+    ----------
+    Ss : nested list of lists
+        each list is a six element tensors
+    
+    Returns
+    -------
+    nf : degrees of freedom
+    sigma : sigma of the list
+    avs : the original list
+    
+    Examples
+    --------
+    >>> Ss = [[0.33586472,0.32757074,0.33656454,0.0056526,0.00449771,-0.00036542], [0.33815295,0.32601482,0.33583224,0.00754076,0.00405271,-0.0001627],
+        [0.33806428,0.32925552,0.33268023,0.00480824,-0.00168595,0.0009308], [0.33939844,0.32750368,0.33309788,0.00763409,0.00264978,0.00070303],
+        [0.3348785,0.32816416,0.33695734,0.00574405,0.00278172,-0.00073475], [0.33485019,0.32948497,0.33566481,0.00597801,0.00426423,-0.00040056]]
+    >>> pmag.sbar(Ss)
+    (30,
+     0.0018030794236146297,
+     [0.33686818,
+      0.3279989816666667,
+      0.33513284,
+      0.0062262916666666656,
+      0.002760033333333333,
+      -4.933333333333345e-06])
     """
     if type(Ss) == list:
         Ss = np.array(Ss)
@@ -7856,15 +8422,16 @@ def sbar(Ss):
 
 def dohext(nf, sigma, s):
     """
-    calculates hext parameters for nf, sigma and s
+    Calculates hext parameters for nf, sigma and s.
 
     Parameters
-    __________
+    ----------
     nf :  number of degrees of freedom (measurements - 6)
     sigma : the sigma of the measurements
     s : [x11,x22,x33,x12,x23,x13] - the six tensor elements
 
-    Return
+    Returns
+    -------
     hpars : dictionary of Hext statistics with keys:
         'F_crit' : critical value for anisotropy
         'F12_crit' : critical value for tau1>tau2, tau2>3
@@ -7885,10 +8452,28 @@ def dohext(nf, sigma, s):
         'e13': angle of confidence ellipse of principal eigenvector in direction of minor eigenvector
 
     If working with data set with no sigmas and the average is desired, use nf,sigma,avs=pmag.sbar(Ss) as input
-
+    
+    Examples
+    --------
+    >>> pmag.dohext(30, 0.00027464, [0.33586472,0.32757074,0.33656454,0.0056526,0.00449771,-0.00036542])
+    {'F_crit': '2.5335',
+     'F12_crit': '3.3158',
+     'F': 820.3194287677485,
+     'F12': 74.97208429827333,
+     'F23': 1167.2979118918333,
+     'v1_dec': 38.360480228001826,
+     'v1_inc': 36.10621428141474,
+     'v2_dec': 183.62757676112915,
+     'v2_inc': 48.41031537341878,
+     'v3_dec': 294.8243200339332,
+     'v3_inc': 17.791534673908338,
+     't1': 0.33999866,
+     't2': 0.33663565,
+     't3': 0.3233657,
+     'e12': 6.002663418693858,
+     'e23': 1.5264872237415046,
+     'e13': 1.2179522275647792}
     """
-
-#
     hpars = {}
     hpars['F_crit'] = '0'
     hpars['F12_crit'] = '0'
@@ -7942,7 +8527,51 @@ def dohext(nf, sigma, s):
 
 def design(npos):
     """
-     make a design matrix for an anisotropy experiment
+    Make a design matrix for an anisotropy experiment. 
+    
+    Parameters
+    ----------
+    npos : number of measurement positions.
+        either 15 or 6
+
+    Returns
+    -------
+    A : design matrix array for the given number of positions
+    B : suseptibilities array
+    
+    Examples
+    --------
+    >>> pmag.design(10)
+    measurement protocol not supported yet 
+
+    >>> pmag.design(15)
+    (array([[ 0.5,  0.5,  0. , -1. ,  0. ,  0. ],
+        [ 0.5,  0.5,  0. ,  1. ,  0. ,  0. ],
+        [ 1. ,  0. ,  0. ,  0. ,  0. ,  0. ],
+        [ 0.5,  0.5,  0. , -1. ,  0. ,  0. ],
+        [ 0.5,  0.5,  0. ,  1. ,  0. ,  0. ],
+        [ 0. ,  0.5,  0.5,  0. , -1. ,  0. ],
+        [ 0. ,  0.5,  0.5,  0. ,  1. ,  0. ],
+        [ 0. ,  1. ,  0. ,  0. ,  0. ,  0. ],
+        [ 0. ,  0.5,  0.5,  0. , -1. ,  0. ],
+        [ 0. ,  0.5,  0.5,  0. ,  1. ,  0. ],
+        [ 0.5,  0. ,  0.5,  0. ,  0. , -1. ],
+        [ 0.5,  0. ,  0.5,  0. ,  0. ,  1. ],
+        [ 0. ,  0. ,  1. ,  0. ,  0. ,  0. ],
+        [ 0.5,  0. ,  0.5,  0. ,  0. , -1. ],
+        [ 0.5,  0. ,  0.5,  0. ,  0. ,  1. ]]),
+     array([[ 0.15,  0.15,  0.4 ,  0.15,  0.15, -0.1 , -0.1 , -0.1 , -0.1 ,
+         -0.1 ,  0.15,  0.15, -0.1 ,  0.15,  0.15],
+        [ 0.15,  0.15, -0.1 ,  0.15,  0.15,  0.15,  0.15,  0.4 ,  0.15,
+          0.15, -0.1 , -0.1 , -0.1 , -0.1 , -0.1 ],
+        [-0.1 , -0.1 , -0.1 , -0.1 , -0.1 ,  0.15,  0.15, -0.1 ,  0.15,
+          0.15,  0.15,  0.15,  0.4 ,  0.15,  0.15],
+        [-0.25,  0.25,  0.  , -0.25,  0.25,  0.  ,  0.  ,  0.  ,  0.  ,
+          0.  ,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ],
+        [ 0.  ,  0.  ,  0.  ,  0.  ,  0.  , -0.25,  0.25,  0.  , -0.25,
+          0.25,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ],
+        [ 0.  ,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ,
+          0.  , -0.25,  0.25,  0.  , -0.25,  0.25]]))
     """
     if npos == 15:
         #
@@ -7967,7 +8596,43 @@ def design(npos):
 
 def dok15_s(k15):
     """
-    calculates least-squares matrix for 15 measurements from Jelinek [1976]
+    Calculates least-squares matrix for 15 measurements from Jelinek [1976].
+    
+    Parameters
+    ----------
+    k15 : k15 value
+    
+    Returns
+    -------
+    sbar : array of six 15 element tensors
+    sigma : array of sigma, standard deviation, of the measurement
+    bulk : array of bulk susptibility 
+    
+    Examples
+    --------
+    >>> pmag.dok15_s(0.5)
+    (array([[ 0.75,  0.75,  2.  ,  0.75,  0.75, -0.5 , -0.5 , -0.5 , -0.5 ,
+         -0.5 ,  0.75,  0.75, -0.5 ,  0.75,  0.75],
+        [ 0.75,  0.75, -0.5 ,  0.75,  0.75,  0.75,  0.75,  2.  ,  0.75,
+          0.75, -0.5 , -0.5 , -0.5 , -0.5 , -0.5 ],
+        [-0.5 , -0.5 , -0.5 , -0.5 , -0.5 ,  0.75,  0.75, -0.5 ,  0.75,
+          0.75,  0.75,  0.75,  2.  ,  0.75,  0.75],
+        [-1.25,  1.25,  0.  , -1.25,  1.25,  0.  ,  0.  ,  0.  ,  0.  ,
+          0.  ,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ],
+        [ 0.  ,  0.  ,  0.  ,  0.  ,  0.  , -1.25,  1.25,  0.  , -1.25,
+          1.25,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ],
+        [ 0.  ,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ,
+          0.  , -1.25,  1.25,  0.  , -1.25,  1.25]]),
+     array([6.101001739241042, 6.101001739241042, 6.101001739241042,
+        6.101001739241042, 6.101001739241042, 6.101001739241042,
+        6.101001739241042, 6.101001739241042, 6.101001739241042,
+        6.101001739241042, 6.10100173924104 , 6.10100173924104 ,
+        6.101001739241042, 6.10100173924104 , 6.10100173924104 ]),
+     array([0.033333333333333, 0.033333333333333, 0.033333333333333,
+        0.033333333333333, 0.033333333333333, 0.033333333333333,
+        0.033333333333333, 0.033333333333333, 0.033333333333333,
+        0.033333333333333, 0.033333333333333, 0.033333333333333,
+        0.033333333333333, 0.033333333333333, 0.033333333333333]))
     """
 #
     A, B = design(15)  # get design matrix for 15 measurements
@@ -7985,7 +8650,21 @@ def dok15_s(k15):
 
 def cross(v, w):
     """
-     cross product of two vectors
+    Cross product of two vectors.
+    
+    Parameters
+    ----------
+    v : 3 value vector list
+    w : 3 value vector list
+    
+    Returns
+    -------
+    [x, y, z] : cross product resultant vector
+    
+    Examples 
+    --------
+    >>> pmag.cross([3,6,0],[1,5,1])
+    [6, -3, 9]
     """
     x = v[1] * w[2] - v[2] * w[1]
     y = v[2] * w[0] - v[0] * w[2]
@@ -7996,15 +8675,23 @@ def cross(v, w):
 
 def dosgeo(s, az, pl):
     """
-    rotates  matrix a to az,pl returns  s
+    Rotates matrix a to its azimuth and plunge. 
+    
     Parameters
-    __________
+    ----------
     s : [x11,x22,x33,x12,x23,x13] - the six tensor elements
     az : the azimuth of the specimen X direction
     pl : the plunge (inclination) of the specimen X direction
 
-    Return
-    s_rot : [x11,x22,x33,x12,x23,x13] - after rotation
+    Returns
+    -------
+    s_rot : [x11,x22,x33,x12,x23,x13] after rotation
+    
+    Examples
+    --------
+    >>> pmag.dosgeo([0.33586472,0.32757074,0.33656454,0.0056526,0.00449771,-0.00036542],12,33)
+    array([ 0.33509237  ,  0.3288845   ,  0.33602312  ,  0.0038898108,
+        0.0066036563, -0.0018823999], dtype=float32)
     """
 #
     a = s2a(s)  # convert to 3,3 matrix
@@ -8032,14 +8719,20 @@ def dostilt(s, bed_az, bed_dip):
     Rotates "s" tensor to stratigraphic coordinates
 
     Parameters
-    __________
+    ----------
     s : [x11,x22,x33,x12,x23,x13] - the six tensor elements
     bed_az : bedding dip direction
     bed_dip :  bedding dip
 
-    Return
+    Returns
+    -------
     s_rot : [x11,x22,x33,x12,x23,x13] - after rotation
-
+    
+    Examples 
+    --------
+    >>> pmag.dostilt([0.33586472,0.32757074,0.33656454,0.0056526,0.00449771,-0.00036542],20,38)
+    array([ 0.33473614  ,  0.32911453  ,  0.33614933  ,  0.0075679934,
+        0.0020322995, -0.0014457355], dtype=float32)
     """
     tau, Vdirs = doseigs(s)
     Vrot = []
@@ -8054,9 +8747,28 @@ def dostilt(s, bed_az, bed_dip):
 
 def apseudo(Ss, ipar, sigma):
     """
-     draw a bootstrap sample of Ss
+    Depreciated: 9/14/2022
+    
+    Draw a bootstrap sample of Ss.
+    
+    Parameters
+    ----------
+    Ss : six element tensor as a list
+    ipar : boolean (True, False, or zero value)
+    sigma : sigma of Ss
+    
+    Returns
+    -------
+    BSs : array 
+        bootstrap sample of Ss
+        
+    Examples 
+    --------
+    >>> pmag.apseudo(np.array([2,2,1,6,1,1]),0,0)
+    array([1, 2, 1, 2, 2, 1])
     """
 #
+    Ss = np.array(Ss)   # added 9/9/22 for consistency with other functions using the variable "Ss"
     Is = random.randint(0, len(Ss) - 1, size=len(Ss))  # draw N random integers
     #Ss = np.array(Ss)
     if not ipar: # ipar == 0:
@@ -8075,7 +8787,54 @@ def apseudo(Ss, ipar, sigma):
 
 def sbootpars(Taus, Vs):
     """
-     get bootstrap parameters for s data
+    Get bootstrap parameters for s data from bootstrap eigenvalues and eigenvectors.
+    
+    Parameters
+    ----------
+    Taus : nested list of eigenvalues
+    Vs : nested list of eigenvectors
+    
+    Returns 
+    -------
+    bpars : dictionary of bootstrap parameters for the bootstrap eigenvalues and eigenvectors.
+    
+    Examples 
+    --------
+    >>> Taus = [[0.89332515, 0.2421235, -0.13544868], [1.2330734, 0.033398163, -0.26647156]]
+    >>> Vs = [[[16.71852040881784, 22.059363998317398],
+           [122.30845200565045, 33.55240424468586],
+           [259.90057243022835, 48.06963167162283]],
+          [[36.31805058172574, 15.477280574403938],
+           [183.99811452360234, 71.85809815162672],
+           [303.738439079619, 9.23224775163199]]]
+    >>> pmag.sbootpars(Taus, Vs)
+    {'t1_sigma': 0.24023829147126252,
+     't2_sigma': 0.1475911011981474,
+     't3_sigma': 0.09264716693859128,
+     'v1_dec': 26.711662224665808,
+     'v1_inc': 19.026277799227568,
+     'v1_zeta': 24.690888880899667,
+     'v1_eta': 1.249303736510881e-14,
+     'v1_zeta_dec': 290.06398627901706,
+     'v1_zeta_inc': 18.55700265945684,
+     'v1_eta_dec': 159.07273109103403,
+     'v1_eta_inc': 62.89733254726475,
+     'v2_dec': 137.92012533786792,
+     'v2_inc': 55.87313967394276,
+     'v2_zeta': 1.250107785929978e-14,
+     'v2_eta': 75.07258147484707,
+     'v2_zeta_dec': 20.268001361016218,
+     'v2_zeta_inc': 17.460349183865556,
+     'v2_eta_dec': 280.5183204912709,
+     'v2_eta_inc': 28.297554981599696,
+     'v3_dec': 286.25118089868266,
+     'v3_inc': 30.42076774734727,
+     'v3_zeta': 2.4071834979709793e-14,
+     'v3_eta': 85.83440673704222,
+     'v3_zeta_dec': 40.186767906504166,
+     'v3_zeta_inc': 34.642182695768,
+     'v3_eta_dec': 166.24042846510952,
+     'v3_eta_inc': 40.4243181226488}
     """
 #
     Tau1s, Tau2s, Tau3s = [], [], []
@@ -8132,21 +8891,38 @@ def sbootpars(Taus, Vs):
 
 def s_boot(Ss, ipar=0, nb=1000):
     """
-    Returns bootstrap parameters for S data
+    Returns bootstrap parameters for S data.
 
     Parameters
-    __________
+    ----------
     Ss : nested array of [[x11 x22 x33 x12 x23 x13],....] data
     ipar : if True, do a parametric bootstrap
     nb : number of bootstraps
 
     Returns
-    ________
+    -------
     Tmean : average eigenvalues
     Vmean : average eigvectors
     Taus : bootstrapped eigenvalues
     Vs :  bootstrapped eigenvectors
-
+    
+    Examples
+    --------
+    >>> Ss = [[0.33586472,0.32757074,0.33656454,0.0056526,0.00449771,-0.00036542], [0.33815295,0.32601482,0.33583224,0.00754076,0.00405271,-0.0001627],
+        [0.33806428,0.32925552,0.33268023,0.00480824,-0.00168595,0.0009308], [0.33939844,0.32750368,0.33309788,0.00763409,0.00264978,0.00070303],
+        [0.3348785,0.32816416,0.33695734,0.00574405,0.00278172,-0.00073475], [0.33485019,0.32948497,0.33566481,0.00597801,0.00426423,-0.00040056]]
+    >>> pmag.s_boot(Ss,0,2)
+    ([0.34040287, 0.3353659, 0.32423124],
+     [[29.594002551414974, 14.457521581993113],
+      [166.31028417625646, 70.4972100801602],
+      [296.2343306258123, 12.805665338949966]],
+     [[0.34002233, 0.33413905, 0.32583863], [0.34043044, 0.33551994, 0.32404962]],
+     [[[26.298051965057486, 5.235004519419732],
+       [183.15464080261913, 84.30971842978398],
+       [296.0941733228108, 2.224044816930646]],
+      [[28.798353815000212, 14.686330248560294],
+       [166.21187481069492, 70.40546729047502],
+       [295.4174263407004, 12.681162985818712]]])
     """
     #npts = len(Ss)
     Ss = np.array(Ss)
@@ -8175,7 +8951,18 @@ def s_boot(Ss, ipar=0, nb=1000):
 def designAARM(npos):
     #
     """
-    calculates B matrix for AARM calculations.
+    Calculates B matrix for AARM calculations.
+    
+    Parameters
+    ----------
+    npos : number of positions
+        9 is the only number of positions valid.
+        
+    Returns
+    -------
+    B : B matrix as an array
+    H : Field directions
+    tmpH : tmpH matrix
     """
     if npos != 9:
         print('Sorry - only 9 positions available')
@@ -8225,7 +9012,18 @@ def designAARM(npos):
 def designATRM(npos):
     #
     """
-    calculates B matrix for ATRM calculations.
+    Calculates B matrix for ATRM calculations.
+    
+    Parameters
+    ----------
+    npos : number of positions
+        6 and greater number of positions valid.
+        
+    Returns
+    -------
+    B : B matrix as an array
+    H : Field directions
+    tmpH : tmpH matrix
     """
     # if npos!=6:
     #    print 'Sorry - only 6 positions available'
@@ -8272,7 +9070,7 @@ def designATRM(npos):
 
 def domagicmag(file, Recs):
     """
-    converts a magic record back into the SIO mag format
+    Converts a magic record back into the SIO mag format.
     """
     for rec in Recs:
         type = ".0"
@@ -8325,10 +9123,10 @@ def cleanup(first_I, first_Z):
 
 def sortarai(datablock, s, Zdiff, **kwargs):
     """
-     sorts data block in to first_Z, first_I, etc.
+    Sorts data block in to first_Z, first_I, etc.
 
     Parameters
-    _________
+    ----------
     datablock : Pandas DataFrame with Thellier-Tellier type data
     s : specimen name
     Zdiff : if True, take difference in Z values instead of vector difference
@@ -8337,7 +9135,7 @@ def sortarai(datablock, s, Zdiff, **kwargs):
         version : data model.  if not 3, assume data model = 2.5
 
     Returns
-    _______
+    -------
     araiblock : [first_Z, first_I, ptrm_check,
                  ptrm_tail, zptrm_check, GammaChecks]
     field : lab field (in tesla)
@@ -8715,11 +9513,25 @@ def docustom(lon, lat, alt, gh):
     Passes the coefficients to the Malin and Barraclough
     routine (function pmag.magsyn) to calculate the field from the coefficients.
 
-    Parameters:
-    -----------
-    lon  = east longitude in degrees (0 to 360 or -180 to 180)
-    lat   = latitude in degrees (-90 to 90)
-    alt   = height above mean sea level in km (itype = 1 assumed)
+    Parameters
+    ----------
+    lon : east longitude in degrees (0 to 360 or -180 to 180)
+    lat : latitude in degrees (-90 to 90)
+    alt : height above mean sea level in km (itype = 1 assumed)
+    gh : list of gauss coefficients
+    
+    Returns
+    -------
+    x : north component of the magnetic field in nT
+    y : east component of the magnetic field in nT
+    z : downward component of the magnetic field in nT
+    f : total magnetic field in nT
+    
+    Examples
+    --------
+    >>> gh = pmag.doigrf(30,70,10,2022,coeffs=True)
+    >>> pmag.docustom(30,70,10,gh)
+    (10033.695088989529, 2822.610862622648, 53170.834174096184, 54182.8365443324)
     """
     model, date, itype = 0, 0, 1
     sv = np.zeros(4*len(gh))
@@ -8734,15 +9546,15 @@ def doigrf(lon, lat, alt, date, **kwargs):
     secular variation coefficients and passes them to the Malin and Barraclough
     routine (function pmag.magsyn) to calculate the field from the coefficients.
 
-    Parameters:
-    -----------
-    lon  : east longitude in degrees (0 to 360 or -180 to 180)
-    lat   : latitude in degrees (-90 to 90)
-    alt   : height above mean sea level in km (itype = 1 assumed)
-    date  : Required date in years and decimals of a year (A.D.)
+    Parameters
+    ----------
+    lon : east longitude in degrees (0 to 360 or -180 to 180)
+    lat : latitude in degrees (-90 to 90)
+    alt : height above mean sea level in km (itype = 1 assumed)
+    date : Required date in years and decimals of a year (A.D.)
 
-    Optional Parameters:
-    -----------
+    Optional Parameters
+    -------------------
     coeffs : if True, then return the gh coefficients
     mod  : model to use ('arch3k','cals3k','pfm9k','hfm10k','cals10k.2','cals10k.1b','shadif14k','shawq2k','shawqIA')
         arch3k (Korte et al., 2009)
@@ -8757,12 +9569,14 @@ def doigrf(lon, lat, alt, date, **kwargs):
         ggf100k (Panofska et al., 2018) [in 200 year increments from -99950 to 1850 only]
           NB : the first four of these models, are constrained to agree
                with gufm1 (Jackson et al., 2000) for the past four centuries
-    Return
-    -----------
+    Returns
+    -------
     x : north component of the magnetic field in nT
     y : east component of the magnetic field in nT
     z : downward component of the magnetic field in nT
     f : total magnetic field in nT
+    gh : list of gauss coefficients
+        only if coeffs=True
 
     By default, igrf13 coefficients are used between 1900 and 2020
     from http://www.ngdc.noaa.gov/IAGA/vmod/igrf.html.
@@ -8770,6 +9584,19 @@ def doigrf(lon, lat, alt, date, **kwargs):
 
     To check the results you can run the interactive program at the NGDC
     www.ngdc.noaa.gov/geomag-web
+    
+    Examples
+    --------
+    >>> pmag.doigrf(30,70,10,2022)
+    (10030.985358058582, 2797.0490284010084, 53258.99275624336, 54267.52675339505)
+    
+    >>> pmag.doigrf(30,70,10,2022,coeffs=True)
+    array([-2.94048e+04, -1.45090e+03,  4.65250e+03, -2.49960e+03,
+        2.98200e+03, -2.99160e+03,  1.67700e+03, -7.34600e+02,
+        1.36320e+03, -2.38120e+03, -8.21000e+01,  1.23620e+03,
+        2.41900e+02,  5.25700e+02, -5.43400e+02,  9.03000e+02,
+        8.09500e+02,  2.81900e+02,  8.63000e+01, -1.58400e+02,
+       -3.09400e+02,  1.99700e+02,  4.80000e+01, -3.49700e+02, ...
     """
     from . import coefficients as cf
     gh, sv = [], []
@@ -8880,15 +9707,29 @@ def doigrf(lon, lat, alt, date, **kwargs):
 
 def unpack(gh):
     """
-    unpacks gh list into l m g h type list
+    Unpacks gh list into l m g h type list.
 
     Parameters
-    _________
+    ----------
     gh : list of gauss coefficients (as returned by, e.g., doigrf)
 
     Returns
-   data : nested list of [[l,m,g,h],...]
-
+    -------
+    data : nested list of [[l,m,g,h],...]
+    
+    Examples
+    --------
+    >>> gh = pmag.doigrf(30,70,10,2022,coeffs=True)
+    >>> pmag.unpack(gh)
+    [[1, 0, -29404.8, 0],
+     [1, 1, -1450.9, 4652.5],
+     [2, 0, -2499.6, 0],
+     [2, 1, 2982.0, -2991.6],
+     [2, 2, 1677.0, -734.6],
+     [3, 0, 1363.2, 0],
+     [3, 1, -2381.2, -82.1],
+     [3, 2, 1236.2, 241.9],
+     [3, 3, 525.7, -543.4], ...
     """
     data = []
     k, l = 0, 1
@@ -8906,31 +9747,32 @@ def unpack(gh):
 
 def magsyn(gh, sv, b, date, itype, alt, colat, elong):
     """
-# Computes x, y, z, and f for a given date and position, from the
-# spherical harmonic coefficients of the International Geomagnetic
-# Reference Field (IGRF).
-# From Malin and Barraclough (1981), Computers and Geosciences, V.7, 401-405.
-#
-# Input:
-#       date  = Required date in years and decimals of a year (A.D.)
-#       itype = 1, if geodetic coordinates are used, 2 if geocentric
-#       alt   = height above mean sea level in km (if itype = 1)
-#       alt   = radial distance from the center of the earth (itype = 2)
-#       colat = colatitude in degrees (0 to 180)
-#       elong = east longitude in degrees (0 to 360)
-#               gh        = main field values for date (calc. in igrf subroutine)
-#               sv        = secular variation coefficients (calc. in igrf subroutine)
-#               begin = date of dgrf (or igrf) field prior to required date
-#
-# Output:
-#       x     - north component of the magnetic force in nT
-#       y     - east component of the magnetic force in nT
-#       z     - downward component of the magnetic force in nT
-#       f     - total magnetic force in nT
-#
-#       NB: the coordinate system for x,y, and z is the same as that specified
-#       by itype.
-#
+    Computes x, y, z, and f for a given date and position, from the
+    spherical harmonic coefficients of the International Geomagnetic
+    Reference Field (IGRF).
+    From Malin and Barraclough (1981), Computers and Geosciences, V.7, 401-405.
+ 
+    Parameters
+    ----------
+    gh : main field values for date (calc. in igrf subroutine)
+    sv : secular variation coefficients (calc. in igrf subroutine)
+    b : date of dgrf (or igrf) field prior to required date
+    date : Required date in years and decimals of a year (A.D.)
+    itype : 1, if geodetic coordinates are used, 2 if geocentric
+    alt : itype = 1 : height above mean sea level in km 
+          itype = 2 : radial distance from the center of the earth 
+    colat : colatitude in degrees (0 to 180)
+    elong : east longitude in degrees (0 to 360)
+ 
+    Returns
+    -------
+    x : north component of the magnetic force in nT
+    y : east component of the magnetic force in nT
+    z : downward component of the magnetic force in nT
+    f : total magnetic force in nT
+        
+    note: the coordinate system for x,y, and z is the same as that specified by itype
+    """
 # Modified 4/9/97 to use DGRFs from 1945 to 1990 IGRF
 # Modified 10/13/06 to use  1995 DGRF, 2005 IGRF and sv coefficient
 # for extrapolation beyond 2005. Coefficients from Barton et al. PEPI, 97: 23-26
@@ -8941,7 +9783,7 @@ def magsyn(gh, sv, b, date, itype, alt, colat, elong):
 # igrf subroutine calculates
 # the proper main field and secular variation coefficients (interpolated between
 # dgrf values or extrapolated from 1995 sv values as appropriate).
-    """
+
 #
 #       real gh(120),sv(120),p(66),q(66),cl(10),sl(10)
 #               real begin,dateq
@@ -9048,7 +9890,7 @@ def magsyn(gh, sv, b, date, itype, alt, colat, elong):
 
 def measurements_methods(meas_data, noave):
     """
-    get list of unique specs
+    Get list of unique specs
     """
 #
     version_num = get_version()
@@ -9560,7 +10402,7 @@ def measurements_methods(meas_data, noave):
 
 def measurements_methods3(meas_data, noave,savelast=False):
     """
-    add necessary method codes, experiment names, sequence, etc.
+    Add necessary method codes, experiment names, sequence, etc.
     """
 #
     if noave:
@@ -10243,7 +11085,7 @@ def mw_measurements_methods(MagRecs):
 
 def parse_site(sample, convention, Z):
     """
-    parse the site name from the sample name using the specified convention
+    Parse the site name from the sample name using the specified convention
     """
     convention = str(convention)
     site = sample  # default is that site = sample
@@ -10296,7 +11138,7 @@ def parse_site(sample, convention, Z):
 
 def get_samp_con():
     """
-     get sample naming  convention
+    Get sample naming convention.
     """
 #
     samp_con, Z = "", ""
@@ -10343,7 +11185,7 @@ def get_tilt(dec_geo, inc_geo, dec_tilt, inc_tilt):
     """
     Function to return the dip direction and dip that would yield the tilt
     corrected direction if applied to the uncorrected direction (geographic
-    coordinates)
+    coordinates).
 
     Parameters
     ----------
@@ -10355,6 +11197,11 @@ def get_tilt(dec_geo, inc_geo, dec_tilt, inc_tilt):
     Returns
     -------
     DipDir, Dip : tuple of dip direction and dip
+    
+    Examples
+    --------
+    >>> pmag.get_tilt(85,110,80.2,112.3)
+    (223.67057238530975, 2.95374920443805)
     """
 # strike is horizontal line equidistant from two input directions
     SCart = [0, 0, 0]  # cartesian coordites of Strike
@@ -10385,7 +11232,23 @@ def get_tilt(dec_geo, inc_geo, dec_tilt, inc_tilt):
 
 def get_azpl(cdec, cinc, gdec, ginc):
     """
-     gets azimuth and pl from specimen dec inc (cdec,cinc) and gdec,ginc (geographic)  coordinates
+    Gets azimuth and plunge from specimen declination, inclination, and (geographic) coordinates.
+    
+    Parameters
+    ----------
+    cdec : specimen declination
+    cinc : specimen inclination
+    gdec : geographic declination
+    ginc : geographic inclination
+    
+    Returns
+    -------
+    list of the two values for the azmiuth and plunge 
+    
+    Examples
+    --------
+    >>> pmag.get_azpl(85,110,80.2,112.3)
+    (323.77999999985053, -12.079999999990653)
     """
     TOL = 1e-4
     Xp = dir2cart([gdec, ginc, 1.])
@@ -10406,7 +11269,7 @@ def get_azpl(cdec, cinc, gdec, ginc):
 
 def set_priorities(SO_methods, ask):
     """
-     figure out which sample_azimuth to use, if multiple orientation methods
+    Figure out which sample_azimuth to use, if multiple orientation methods
     """
     # if ask set to 1, then can change priorities
     SO_methods = [meth.strip() for meth in SO_methods]
@@ -10446,7 +11309,7 @@ def set_priorities(SO_methods, ask):
 
 def get_EOL(file):
     """
-     find EOL of input file (whether mac,PC or unix format)
+    Find EOL of input file (whether mac,PC or unix format)
     """
     f = open(file, 'r')
     firstline = f.read(350)
@@ -10471,8 +11334,8 @@ def get_EOL(file):
 
 def sortshaw(s, datablock):
     """
-     sorts data block in to ARM1,ARM2 NRM,TRM,ARM1,ARM2=[],[],[],[]
-     stick  first zero field stuff into first_Z
+    Sorts data block in to ARM1,ARM2 NRM,TRM,ARM1,ARM2=[],[],[],[]
+    stick first zero field stuff into first_Z
     """
     for rec in datablock:
         methcodes = rec["magic_method_codes"].split(":")
@@ -10534,7 +11397,20 @@ def sortshaw(s, datablock):
 
 def makelist(List):
     """
-     makes a colon delimited list from List
+    Makes a colon delimited list from List.
+    
+    Parameters
+    ----------
+    List : any list of strings or numbers
+    
+    Returns
+    -------
+    colon delimited list
+    
+    Examples 
+    --------
+    >>> pmag.makelist(["mT","T","Am"])
+    'mT:T:Am'
     """
     clist = ""
     for element in List:
@@ -10545,7 +11421,7 @@ def makelist(List):
 def getvec(gh, lat, lon):
     """
     Evaluates the vector at a given latitude and longitude for a specified
-    set of coefficients
+    set of coefficients.
 
     Parameters
     ----------
@@ -10555,7 +11431,14 @@ def getvec(gh, lat, lon):
 
     Returns
     -------
-    vec : direction in [dec, inc, intensity]
+    vec : direction as an array [dec, inc, intensity]
+    
+    Examples 
+    --------
+    >>> gh = pmag.doigrf(30,70,10,2022,coeffs=True)
+    >>> pmag.getvec(gh, 30,70)
+    array([2.007319473143944e+00, 4.740186709049829e+01,
+       4.831229434010185e+04])
     """
     sv = []
     pad = 120 - len(gh)
@@ -10575,14 +11458,23 @@ def getvec(gh, lat, lon):
 
 def s_l(l, alpha=27.7):
     """
-    get sigma as a function of degree l from Constable and Parker (1988)
+    Get sigma as a function of degree l from Constable and Parker (1988)
 
-    Parameters:
-    ___________
+    Parameters
+    ----------
     l : int
         degree of spherical harmonic expansion
     alpha : float
         alpha parameter for CP88 model, default is 27.7 in CP88
+        
+    Returns
+    -------
+    sigma corresponding to degree l
+    
+    Examples
+    --------
+    >>> pmag.s_l(4)
+    0.36967732888223936    
     """
     a2 = alpha**2
     c_a = 0.547
@@ -10591,11 +11483,12 @@ def s_l(l, alpha=27.7):
 #
 
 
-def mktk03(terms, seed, G2, G3,verbose=False):
+def mktk03(terms, seed, G2, G3,G1=-18e3,verbose=False):
     """
-    generates a list of gauss coefficients drawn from the TK03 distribution
+    Generates a list of gauss coefficients drawn from the TK03 distribution.
+    
     Parameters
-    ______________
+    ----------
     terms : int
             number of terms to return
     seed : random seed
@@ -10603,16 +11496,19 @@ def mktk03(terms, seed, G2, G3,verbose=False):
          ratio of axial quadrupole term to dipole term
     G3 : int
          ratio of axial octupole term to dipole term
+    G1 : float
+         value of the axial dipole, default is -18e3 (in nT)
+    verbose : default is False
     
     Returns
-    ________________
+    -------
     gh : list
         list of l,m,g,h field model generated by TK03
     """
 # random.seed(n)
     n = seed
     gh = []
-    g10, beta, afact = -18e3, 3.8, 2.4
+    g10, beta, afact = G1, 3.8, 2.4
     g20 = G2 * g10
     g30 = G3 * g10
     alpha = g10/afact
@@ -10655,16 +11551,21 @@ def mktk03(terms, seed, G2, G3,verbose=False):
 
 def pinc(lat):
     """
-    calculate paleoinclination from latitude using dipole formula: tan(I) = 2tan(lat)
+    Calculate paleoinclination from latitude using dipole formula: tan(I) = 2tan(lat). 
+    
     Parameters
-    ________________
-
+    ----------
     lat : either a single value or an array of latitudes
 
     Returns
     -------
-
     array of inclinations
+    
+    Examples
+    --------
+    >>> lats = [45,40,60,80, -30,55]
+    >>> np.round(pmag.pinc(lats),1)
+    array([ 63.4,  59.2,  73.9,  85. , -49.1,  70.7])
     """
     tanl = np.tan(np.radians(lat))
     inc = np.arctan(2. * tanl)
@@ -10674,16 +11575,21 @@ def pinc(lat):
 
 def plat(inc):
     """
-    calculate paleolatitude from inclination using dipole formula: tan(I) = 2tan(lat)
+    Calculate paleolatitude from inclination using dipole formula: tan(I) = 2tan(lat).
+    
     Parameters
-    ________________
-
+    ----------
     inc : either a single value or an array of inclinations
 
     Returns
     -------
-
     array of latitudes
+    
+    Examples
+    --------
+    >>> incs = [63.4,59.2,73.9,85,-49.1,70.7]
+    >>> np.round(pmag.plat(incs))
+    array([ 45.,  40.,  60.,  80., -30.,  55.])
     """
     tani = np.tan(np.radians(inc))
     lat = np.arctan(tani/2.)
@@ -10695,7 +11601,7 @@ def plat(inc):
 def pseudo(DIs, random_seed=None):
     """
     Draw a bootstrap sample of directions returning as many bootstrapped samples
-    as in the input directions
+    as in the input directions.
 
     Parameters
     ----------
@@ -10706,6 +11612,16 @@ def pseudo(DIs, random_seed=None):
     -------
     Bootstrap_directions : nested list of dec, inc lists that have been
     bootstrapped resampled
+    
+    Examples
+    --------
+    >>> di_block = ([[-45,150],
+     [-40,150],
+     [-38,145]])
+    >>> pmag.pseudo(di_block,10)
+    array([[-40, 150],
+       [-40, 150],
+       [-45, 150]])
     """
     if random_seed != None:
         np.random.seed(random_seed)
@@ -10716,15 +11632,28 @@ def pseudo(DIs, random_seed=None):
 
 def di_boot(DIs, nb=5000):
     """
-     returns bootstrap means  for Directional data
-     Parameters
-     _________________
-     DIs : nested list of Dec,Inc pairs
-     nb : number of bootstrap pseudosamples
+    Returns bootstrap means for Directional data.
+     
+    Parameters
+    ----------
+    DIs : nested list of Dec,Inc pairs
+    nb : number of bootstrap pseudosamples, default is 5000
 
-     Returns
+    Returns
     -------
-     BDIs:   nested list of bootstrapped mean Dec,Inc pairs
+    BDIs : nested list of bootstrapped mean Dec,Inc pairs
+    
+    Examples
+    --------
+    >>> di_block = ([[-45,150],
+     [-40,150],
+     [-38,145]])
+    >>> pmag.di_boot(di_block,5)
+    [[136.66619627955163, 30.021001931432338],
+     [138.33380372044837, 30.02100193143235],
+     [140.64213759144877, 31.669596401508702],
+     [136.66619627955163, 30.021001931432338],
+     [139.58053739971953, 33.378250658618654]]
     """
 #
 # now do bootstrap to collect BDIs  bootstrap means
@@ -10745,7 +11674,7 @@ def dir_df_boot(dir_df, nb=5000, par=False):
     Performs a bootstrap for direction DataFrame with optional parametric bootstrap
 
     Parameters
-    _________
+    ----------
     dir_df : Pandas DataFrame with columns:
         dir_dec : mean declination
         dir_inc : mean inclination
@@ -10756,8 +11685,26 @@ def dir_df_boot(dir_df, nb=5000, par=False):
     par : if True, do a parameteric bootstrap
 
     Returns
-     _______
-     BDIs:   nested list of bootstrapped mean Dec,Inc pairs
+    -------
+    BDIs : nested list of bootstrapped mean Dec,Inc pairs
+    
+    Examples
+    --------
+    >>> dir_df = pd.DataFrame()
+    >>> dir_df['dir_inc'] = [30,75,-113,-127,104]
+    >>> dir_df['dir_dec'] = [50,100,78,48,87]
+    >>> pmag.dir_df_boot(dir_df,nb=4)
+    [[249.0092732274716, 47.78774025782868],
+     [52.15562660104691, 14.523345688004293],
+     [214.5976992675414, 49.79280429500907],
+     [119.6384153360684, 86.17066958304461]]
+     
+    >>> dir_df['dir_n'] = [4,15,2,36,55]
+    >>> dir_df['dir_k'] = [1.2,3.0,0.4,0.4,0.8]
+    >>> pmag.dir_df_boot(dir_df,3,par=True)
+    [[43.54318517848151, 53.40671924110994],
+     [278.5836582875345, 25.159165079114043],
+     [276.59474232833645, -22.88695795286902]]
     """
     N = dir_df.dir_dec.values.shape[0]  # number of data points
     BDIs = []
@@ -10788,13 +11735,14 @@ def dir_df_boot(dir_df, nb=5000, par=False):
 
 def dir_df_fisher_mean(dir_df):
     """
-    calculates fisher mean for Pandas data frame
+    Calculates fisher mean for Pandas dataframe.
 
     Parameters
-    __________
+    ----------
     dir_df: pandas data frame with columns:
         dir_dec : declination
         dir_inc : inclination
+    
     Returns
     -------
     fpars : dictionary containing the Fisher mean and statistics
@@ -10805,6 +11753,7 @@ def dir_df_fisher_mean(dir_df):
         k : Fisher k value
         csd : Fisher circular standard deviation
         alpha95 : Fisher circle of 95% confidence
+    
     """
     N = dir_df.dir_dec.values.shape[0]  # number of data points
     fpars = {}
@@ -10841,7 +11790,7 @@ def dir_df_fisher_mean(dir_df):
 
 def pseudosample(x):
     """
-     draw a bootstrap sample of x
+    Draw a bootstrap sample of x
     """
 #
     BXs = []
@@ -10853,14 +11802,14 @@ def pseudosample(x):
 
 def get_plate_data(plate):
     """
-    returns the pole list for a given plate
+    Returns the pole list for a given plate
 
     Parameters
     ----------
     plate : string (options: AF, ANT, AU, EU, GL, IN, NA, SA)
 
     Returns
-    ---------
+    -------
     apwp : string with format
         0.0        90.00    0.00
         1.0        88.38  182.20
@@ -10871,12 +11820,11 @@ def get_plate_data(plate):
     from . import poles
     apwp = poles.get_apwp(plate)
     return apwp
-#
 
 
 def bc02(data):
     """
-    get APWP from Besse and Courtillot 2002 paper
+    Get APWP from Besse and Courtillot 2002 paper
 
     Parameters
     ----------
@@ -10887,10 +11835,10 @@ def bc02(data):
     age : float in Myr
 
     Returns
-    ----------
-
+    -------
+    pole_lat : pole latitude
+    pole_lon : pole longitude
     """
-
     plate, site_lat, site_lon, age = data[0], data[1], data[2], data[3]
     apwp = get_plate_data(plate)
     recs = apwp.split()
@@ -10920,7 +11868,7 @@ def bc02(data):
 
 def linreg(x, y):
     """
-    does a linear regression
+    Does a linear regression
     """
     if len(x) != len(y):
         print('x and y must be same length')
@@ -10968,16 +11916,16 @@ def interval_overlap(interval_a, interval_b):
 
 def squish(incs, f):
     """
-    returns 'flattened' inclination, assuming factor, f and King (1955) formula:
+    Returns 'flattened' inclination, assuming factor, f and King (1955) formula:
     tan (I_o) = f tan (I_f)
 
     Parameters
-    __________
+    ----------
     incs : array of inclination (I_f)  data to flatten
     f : flattening factor
 
     Returns
-    _______
+    -------
     I_o :  inclinations after flattening
     """
     incs = np.radians(incs)
@@ -10987,17 +11935,30 @@ def squish(incs, f):
 
 def unsquish(incs, f):
     """
-    returns 'unflattened' inclination, assuming factor, f and King (1955) formula:
-    tan (I_o) = tan (I_f)/f
+    Returns 'unflattened' inclination, assuming factor, f and King (1955) formula: tan (I_o) = tan (I_f)/f.
 
     Parameters
-    __________
-    incs : array of inclination (I_f)  data to unflatten
+    ----------
+    incs : array of inclination (I_f) data to unflatten
     f : flattening factor
 
     Returns
-    _______
-    I_o :  inclinations after unflattening
+    -------
+    I_o :  array of inclinations after unflattening
+    
+    Examples
+    --------
+    >>> incs = [63.4,59.2,73.9,85,-49.1,70.7]
+    >>> np.round(pmag.unsquish(incs,2),1)
+    array([ 45. ,  40. ,  60. ,  80.1, -30. ,  55. ])
+    
+    >>> incs=np.loadtxt('data_files/unsquish/unsquish_example.dat')
+    >>> pmag.unsquish(incs,2)
+    array([[ -5.140729823126393,  11.420796025697275],
+       [  0.900222120901553,  10.204588442982518],
+       [  2.957841023919168,   7.263099363956552],
+       [  0.100000304618348,  14.648986731143856],
+       [ 14.887975603633317,  11.476705854028246], ...
     """
     incs = np.radians(incs)
     I_o = np.tan(incs)/f  # divide tangent by flattening factor
@@ -11057,7 +12018,7 @@ def execute(st, **kwargs):
 
 
 def initialize_acceptance_criteria(**kwargs):
-    '''
+    """
     initialize acceptance criteria with NULL values for thellier_gui and demag_gui
 
     acceptance criteria format is doctionaries:
@@ -11089,8 +12050,7 @@ def initialize_acceptance_criteria(**kwargs):
        number of decimal points in rounding
        (this is used in displaying criteria in the dialog box)
        -999 means Exponent with 3 descimal points for floats and string for string
-    '''
-
+    """
     acceptance_criteria = {}
     # --------------------------------
     # 'DE-SPEC'
@@ -11535,7 +12495,7 @@ def initialize_acceptance_criteria(**kwargs):
 
 
 def read_criteria_from_file(path, acceptance_criteria, **kwargs):
-    '''
+    """
     Read accceptance criteria from magic criteria file
     # old format:
     multiple lines.  pmag_criteria_code defines the type of criteria
@@ -11568,7 +12528,7 @@ def read_criteria_from_file(path, acceptance_criteria, **kwargs):
     acceptance_criteria[MagIC Variable Names]['decimal_points']:number of decimal points in rounding
             (this is used in displaying criteria in the dialog box)
 
-    '''
+    """
     warnings = []
     acceptance_criteria_list = list(acceptance_criteria.keys())
     if 'data_model' in list(kwargs.keys()) and kwargs['data_model'] == 3:
@@ -11757,7 +12717,7 @@ def write_criteria_to_file(path, acceptance_criteria, **kwargs):
 
 def add_flag(var, flag):
     """
-    for use when calling command-line scripts from within a program.
+    For use when calling command-line scripts from within a program.
     if a variable is present, add its proper command_line flag.
     return a string.
     """
@@ -11787,7 +12747,7 @@ def get_named_arg(name, default_val=None, reqd=False):
         default is False.
 
     Returns
-    ---------
+    -------
     Desired value from sys.argv if available, otherwise default_val.
     """
     if name in sys.argv:  # if the command line flag is found in sys.argv
@@ -11808,10 +12768,10 @@ def get_flag_arg_from_sys(name, true=True, false=False):
 # Miscellaneous helpers
 
 def merge_recs_headers(recs):
-    '''
-    take a list of recs [rec1,rec2,rec3....], each rec is a dictionary.
+    """
+    Take a list of recs [rec1,rec2,rec3....], each rec is a dictionary.
     make sure that all recs have the same headers.
-    '''
+    """
     headers = []
     for rec in recs:
         keys = list(rec.keys())
@@ -11843,7 +12803,7 @@ def resolve_file_name(fname, dir_path='.'):
         directory, optional
 
     Returns
-    ----------
+    -------
     full_file : str
         full path/to/file.txt
     """
@@ -11946,23 +12906,23 @@ class MissingCommandLineArgException(Exception):
 
 def do_mag_map(date, lon_0=0, alt=0, file="", mod="cals10k",resolution='low'):
     """
-    returns lists of declination, inclination and intensities for lat/lon grid for
+    Returns lists of declination, inclination and intensities for lat/lon grid for
     desired model and date.
 
-    Parameters:
-    _________________
+    Parameters
+    ----------
     date = Required date in decimal years (Common Era, negative for Before Common Era) - NB: only dates prior to 2025 supported
 
-    Optional Parameters:
-    ______________
+    Optional Parameters
+    -------------------
     mod  = model to use ('arch3k','cals3k','pfm9k','hfm10k','cals10k.2','shadif14k','cals10k.1b','custom')
     file = l m g h formatted filefor custom model
     lon_0 : central longitude for Hammer projection
     alt  = altitude
     resolution = ['low','high'] default is low
 
-    Returns:
-    ______________
+    Returns
+    -------
     Bdec=list of declinations
     Binc=list of inclinations
     B = list of total field intensities in nT
@@ -12034,15 +12994,18 @@ def do_mag_map(date, lon_0=0, alt=0, file="", mod="cals10k",resolution='low'):
 def doeqdi(x, y, UP=False):
     """
     Takes digitized x,y, data and returns the dec,inc, assuming an
-    equal area projection
+    equal area projection.
+   
     Parameters
-    __________________
-        x : array of digitized x from point on equal area projection
-        y : array of  igitized y from point on equal area projection
-        UP : if True, is an upper hemisphere projection
-    Output :
-        dec : declination
-        inc : inclination
+    ----------
+    x : array of digitized x from point on equal area projection
+    y : array of  igitized y from point on equal area projection
+    UP : if True, is an upper hemisphere projection
+    
+    Returns
+    -------
+    dec : declination
+    inc : inclination
     """
     xp, yp = y, x  # need to switch into geographic convention
     r = np.sqrt(xp**2+yp**2)
@@ -12060,10 +13023,11 @@ def separate_directions(di_block):
     Separates set of directions into two modes based on principal direction
 
     Parameters
-    _______________
+    ----------
     di_block : block of nested dec,inc pairs
 
-    Return
+    Returns
+    -------
     mode_1_block,mode_2_block :  two arrays of nested dec,inc pairs
     """
     ppars = doprinc(di_block)
@@ -12082,15 +13046,16 @@ def separate_directions(di_block):
 
 def dovandamme(vgp_df):
     """
-    determine the S_b value for VGPs using the Vandamme (1994) method
+    Determine the S_b value for VGPs using the Vandamme (1994) method
     for determining cutoff value for "outliers".
+    
     Parameters
-    ___________
+    ----------
     vgp_df : pandas DataFrame with required column "vgp_lat"
              This should be in the desired coordinate system and assumes one polarity
 
     Returns
-    _________
+    -------
     vgp_df : after applying cutoff
     cutoff : colatitude cutoff
     S_b : S_b of vgp_df  after applying cutoff
@@ -12117,7 +13082,7 @@ def scalc_vgp_df(vgp_df, anti=0, rev=0, cutoff=180., kappa=0, n=0, spin=0, v=0, 
     scatter (McElhinny & McFadden, 1997)
 
     Parameters
-    _________
+    ----------
     vgp_df : Pandas Dataframe with columns
         REQUIRED:
         vgp_lat :  VGP latitude
@@ -12145,15 +13110,14 @@ def scalc_vgp_df(vgp_df, anti=0, rev=0, cutoff=180., kappa=0, n=0, spin=0, v=0, 
         number of bootstrapped pseudosamples for confidence estimate
     verbose : Boolean
         if True, print messages
-         
 
     Returns
-    _____________
-        N : number of VGPs used in calculation
-        S : S
-        low : 95% confidence lower bound [0 if boot=0]
-        high  95% confidence upper bound [0 if boot=0]
-        cutoff : cutoff used in calculation of  S
+    -------
+    N : number of VGPs used in calculation
+    S_B : S value
+    low : 95% confidence lower bound [0 if boot=0]
+    high : 95% confidence upper bound [0 if boot=0]
+    cutoff : cutoff used in calculation of  S
     """
     vgp_df['delta'] = 90.-vgp_df.vgp_lat.values
     # filter by cutoff, kappa, and n if desired
@@ -12198,17 +13162,24 @@ def scalc_vgp_df(vgp_df, anti=0, rev=0, cutoff=180., kappa=0, n=0, spin=0, v=0, 
 
 def watsons_f(DI1, DI2):
     """
-    calculates Watson's F statistic (equation 11.16 in Essentials text book).
+    Calculates Watson's F statistic (equation 11.16 in Essentials text book).
 
     Parameters
-    _________
+    ----------
     DI1 : nested array of [Dec,Inc] pairs
     DI2 : nested array of [Dec,Inc] pairs
 
     Returns
-    _______
+    -------
     F : Watson's F
     Fcrit : critical value from F table
+    
+    Examples
+    --------
+    >>> D1= [[-45,150],[-40,150],[-38,145]]
+    >>> D2= [[-43,140],[-39,130],[-38,145]]
+    >>> pmag.watsons_f(D1,D2)
+    (3.7453156915587567, 4.459)
     """
     # first calculate R for the combined data set, then R1 and R2 for each individually.
     # create a new array from two smaller ones
@@ -12227,25 +13198,27 @@ def watsons_f(DI1, DI2):
 
 def apwp(data, print_results=False):
     """
-    calculates expected pole positions and directions for given plate, location and age
+    Calculates expected pole positions and directions for given plate, location and age.
+    
     Parameters
-    _________
-        data : [plate,lat,lon,age]
-            plate : [NA, SA, AF, IN, EU, AU, ANT, GL]
-                NA : North America
-                SA : South America
-                AF : Africa
-                IN : India
-                EU : Eurasia
-                AU : Australia
-                ANT: Antarctica
-                GL : Greenland
-             lat/lon : latitude/longitude in degrees N/E
-             age : age in millions of years
-        print_results : if True will print out nicely formatted results
+    ----------
+    data : [plate,lat,lon,age]
+        plate : [NA, SA, AF, IN, EU, AU, ANT, GL]
+            NA : North America
+            SA : South America
+            AF : Africa
+            IN : India
+            EU : Eurasia
+            AU : Australia
+            ANT: Antarctica
+            GL : Greenland
+            lat/lon : latitude/longitude in degrees N/E
+            age : age in millions of years
+    print_results : if True will print out nicely formatted results
+    
     Returns
-    _________
-        if print_results is False, [Age,Paleolat, Dec, Inc, Pole_lat, Pole_lon]
+    -------
+    if print_results is False, [Age,Paleolat, Dec, Inc, Pole_lat, Pole_lon]
     """
     pole_lat, pole_lon = bc02(data)  # get the pole for these parameters
     # get the declination and inclination for that pole
@@ -12273,14 +13246,14 @@ def chart_maker(Int, Top, start=100, outfile='chart.txt'):
     P : a pTRM step - performed at the temperature and in the lab field.
 
     Parameters
-    __________
+    ----------
     Int : list of intervals [e.g., 50,10,5]
     Top : list of upper bounds for each interval [e.g., 500, 550, 600]
     start : first temperature step, default is 100
     outfile : name of output file, default is 'chart.txt'
 
-    Output
-    _________
+    Returns
+    -------
     creates a file with:
          file:  write down the name of the measurement file
          field:  write down the lab field for the infield steps (in uT)
@@ -12355,11 +13328,10 @@ def import_basemap():
     environment variables.
 
     Returns
-    ---------
+    -------
     has_basemap : bool
     Basemap : Basemap package if possible else None
     """
-
     Basemap = None
     has_basemap = True
     has_cartopy = import_cartopy()[0]
@@ -12409,7 +13381,7 @@ def import_cartopy():
     if it is not installed
 
     Returns
-    ---------
+    -------
     has_cartopy : bool
     cartopy : cartopy package if available else None
     """
@@ -12433,11 +13405,17 @@ def import_cartopy():
 
 def age_to_BP(age, age_unit):
     """
-    Convert an age value into the equivalent in time Before Present(BP) where Present is 1950
+    Convert an age value into the equivalent in time Before Present(BP) where Present is 1950.
 
+    Parameters
+    ----------
+    age : age as a float
+    age_unit : age unit as a str, valid strings:
+        (Years AD (+/-), Years Cal AD (+/-), Years BP, ka, Ma, or Ga)
+    
     Returns
-    ---------
-    ageBP : number
+    -------
+    ageBP : age before present
     """
     ageBP = -1e9
     if age_unit == "Years AD (+/-)" or age_unit == "Years Cal AD (+/-)":
@@ -12466,13 +13444,15 @@ def vocab_convert(vocab, standard, key=''):
 
     'key' can be used to distinguish vocab terms that exist in two different lists.
 
-    Returns:
+    Returns
+    -------
     value of the MagIC vocab in the standard requested
 
-    Example:
-    vocab_convert('Egypt','GEOMAGIA') will return '1'
+    Examples
+    --------
+    >>> pmag.vocab_convert('Egypt','GEOMAGIA') 
+    '1'
     """
-
     places_to_geomagia = {
         'Egypt':                 "1",
         'Japan':                 "2",
@@ -12698,7 +13678,7 @@ def fix_directories(input_dir_path, output_dir_path):
     output_dir_path : str
 
     Returns
-    ---------
+    -------
     input_dir_path, output_dir_path
     """
     if not input_dir_path:
